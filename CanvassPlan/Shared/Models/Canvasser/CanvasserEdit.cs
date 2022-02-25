@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace CanvassPlan.Shared.Models.Canvasser
 {
-    public class CanvasserCreate
+    public class CanvasserEdit
     {
+        [Required]
+        public int CanvasserId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

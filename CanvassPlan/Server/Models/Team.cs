@@ -8,6 +8,9 @@ namespace CanvassPlan.Server.Models
     {
         [Key]
         public int TeamId { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public string OwnerId { get; set; }
         public ICollection<Canvasser> Canvassers { get; set; }
         public ICollection<Car> Cars { get; set; }  
         [Required]

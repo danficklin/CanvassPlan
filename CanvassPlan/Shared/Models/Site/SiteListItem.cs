@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CanvassPlan.Shared.Models.Canvasser
+namespace CanvassPlan.Shared.Models.Site
 {
-    public class CanvasserListItem
+    public class SiteListItem
     {
-        public int CanvasserId { get; set; }
+        public int SiteId { get; set; }
         public string Name { get; set; }
     }
 }

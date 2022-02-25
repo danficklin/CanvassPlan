@@ -12,6 +12,8 @@ namespace CanvassPlan.Server.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        public string OwnerId { get; set; }
+        [Required]
         public string Phone { get; set; }
         public string AltPhone { get; set; }
         [Required]
