@@ -64,6 +64,33 @@ namespace CanvassPlan.Server.Services.TeamServices
             return detail;
         }
 
+        public async Task<TeamDetail> GetTeamByNameAsync(string name)
+        {
+            var entity = await _ctx.Teams
+                .Include(nameof(Canvasser))
+                .Include(nameof(Car))
+                .FirstOrDefaultAsync(t => t.Name.ToLower() == name.ToLower() && t.OwnerId == _userId);
+            if (entity is null) return null;
+            var detail = new TeamDetail
+            {
+                TeamId = entity.TeamId,
+                Name = name,
+                Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
+                {
+                    CanvasserId = c.CanvasserId,
+                    Name = c.Name,
+                }).ToList(),
+                Cars = entity.Cars.Select(c => new CarListItem
+                {
+                    CarId = c.CarId,
+                    Name = c.Name,
+                }).ToList(),
+                DateCreated = entity.DateCreated,
+                DateModified = entity.DateModified,
+            };
+            return detail;
+        }
+
         public async Task<IEnumerable<TeamListItem>> ListTeamAsync()
         {
             var query = _ctx.Teams

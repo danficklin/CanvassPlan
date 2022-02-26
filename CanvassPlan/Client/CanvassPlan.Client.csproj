@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Shared\CanvassPlan.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Car\" />
+    <Folder Include="Pages\Team\" />
+    <Folder Include="Pages\Site\" />
+  </ItemGroup>
+
 </Project>

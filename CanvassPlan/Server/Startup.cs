@@ -1,5 +1,9 @@
 using CanvassPlan.Server.Data;
 using CanvassPlan.Server.Models;
+using CanvassPlan.Server.Services.CanvasserServices;
+using CanvassPlan.Server.Services.CarServices;
+using CanvassPlan.Server.Services.SiteServices;
+using CanvassPlan.Server.Services.TeamServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +47,11 @@ namespace CanvassPlan.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<ICanvasserService, CanvasserService>();
+            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<ITeamService, TeamService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CanvassPlan.Shared.Models.Team
 {
-    internal class TeamGenerate
+    public class TeamGenerate
     {
     }
 }

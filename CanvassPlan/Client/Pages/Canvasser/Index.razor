@@ -1,0 +1,40 @@
+﻿@page "/canvasser"
+@using CanvassPlan.Shared.Models.Canvasser
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http
+@attribute [Authorize]
+
+<h3>Canvassers</h3>
+<a href="/canvasser/create">Add a canvasser</a>
+@if (canvassers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CanvasserListItem canvasser in canvassers)
+            {
+                <tr>
+                    <td>@canvasser.CanvasserId</td>
+                    <td>@canvasser.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CanvasserListItem> canvassers;
+    protected override async Task OnInitializedAsync()
+    {
+        canvassers = await Http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
+    }
+}
