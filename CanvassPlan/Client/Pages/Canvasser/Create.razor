@@ -1,0 +1,39 @@
+﻿@page "/canvasser/create"
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager navigation
+
+@if (errorMessage != null)
+{
+    <h5 class="text-danger">@errorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="model.Name" />
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm>
+</div>
+
+@code{
+    private CanvasserCreate model = new();
+    private string errorMessage;
+    private async void HandleSubmit()
+    {
+        var createRes = await Http.PostAsJsonAsync<CanvasserCreate>("/api/canvasser", model);
+        if (createRes.IsSuccessStatusCode)
+        {
+            navigation.NavigateTo("/canvasser");
+        }
+        else
+        {
+            errorMessage = "Could not add the canvasser at this time. Please try again later.";
+        }
+    }
+}
+
