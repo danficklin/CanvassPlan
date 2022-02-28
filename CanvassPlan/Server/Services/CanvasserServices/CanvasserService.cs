@@ -29,7 +29,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 IsDriver = model.IsDriver,
                 IsLeader = model.IsLeader,
                 IsTraining = model.IsTraining,
-                OwnerId = _userId
+                OwnerId = _userId,
                 DateCreated = DateTimeOffset.Now,
             };
             _ctx.Canvassers.Add(canvasserEntity);

@@ -1,6 +1,4 @@
 ﻿@page "/canvasser"
-@using CanvassPlan.Shared.Models.Canvasser
-@using Microsoft.AspNetCore.Authorization
 @inject HttpClient Http
 @attribute [Authorize]
 
@@ -15,8 +13,8 @@ else
     <table class="table">
         <thead>
             <tr>
-                <td>Id</td>
-                <td>Name</td>
+                <th>Id</th>
+                <th>Name</th>
             </tr>
         </thead>
         <tbody>
