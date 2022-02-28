@@ -9,7 +9,7 @@
 }
 
 <div class="container">
-    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+    @*<EditForm Model="@model" OnValidSubmit="@HandleSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
@@ -17,7 +17,7 @@
             <InputText class="form-control" @bind-Value="model.Name" />
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
-    </EditForm>
+    </EditForm> *@
 </div>
 
 @code{
