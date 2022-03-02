@@ -14,7 +14,6 @@ namespace CanvassPlan.Shared.Models.Car
         public string Model { get; set; }
         public int Year { get; set; }
         public ICollection<CanvasserListItem> Drivers { get; set; }
-        public ICollection<CanvasserListItem> Passengers { get; set; }
         public ICollection<TeamListItem> Teams { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }

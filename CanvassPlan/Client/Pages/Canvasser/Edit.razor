@@ -17,20 +17,15 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
-            <label>Name</label>
-            <InputText class="form-control" @bind-Value="Model.Name" />
-            <label>Work Phone Number</label>
-            <InputText class="form-control" @bind-Value="Model.Phone" />
-            <label>Personal Phone Number</label>
-            <InputText class="form-control" @bind-Value="Model.AltPhone" />
-            <label>In training?</label>
-            <InputCheckbox class="form-control" @bind-Value="Model.IsTraining" />
-            <label>Authorized to drive?</label>
-            <InputCheckbox class="form-control" @bind-Value="Model.IsDriver" />
-            <label>Team leader?</label>
-            <InputCheckbox class="form-control" @bind-Value="Model.IsLeader" />
-            <label>Is absent?</label>
-            <InputCheckbox class="form-control" @bind-Value="Model.IsAbsent" />
+            <label>Name: <InputText class="form-control" @bind-Value="Model.Name" /></label>
+            <label>Work Phone Number<InputText class="form-control" @bind-Value="Model.Phone" /></label>
+            <label>Personal Phone Number<InputText class="form-control" @bind-Value="Model.AltPhone" /></label>
+            <hr />
+            <label>In training?<InputCheckbox class="form-control" @bind-Value="Model.IsTraining" /></label>
+            <label>Authorized to drive?<InputCheckbox class="form-control" @bind-Value="Model.IsDriver" /></label>
+            <label>Team leader?<InputCheckbox class="form-control" @bind-Value="Model.IsLeader" /></label>
+            <label>Is absent?<InputCheckbox class="form-control" @bind-Value="Model.IsAbsent" /></label>
+            
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
     </EditForm> 

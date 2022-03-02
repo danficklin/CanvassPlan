@@ -27,6 +27,10 @@
                 <h4 class="card-title">Site: @Canvasser.Sites.LastOrDefault()?.Name</h4>
                 } else { <p class="card-text"> Not currently assigned to a site.</p>}
 
+                @if(Canvasser.Cars?.LastOrDefault() != default) {
+                <h4 class="card-title">Site: @Canvasser.Cars.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text"> Not currently assigned to a car.</p>}
+
                 @if(Canvasser.IsAbsent == true) { <p class="card-text">This canvasser is absent.</p>}
 
                 @if(Canvasser.IsDriver == true) { <p class="card-text">This canvasser is qualified to drive.</p>}
@@ -67,8 +71,14 @@ else
     [Parameter]
     public int CanvasserId { get; set; }
     private CanvasserDetail Canvasser = new CanvasserDetail();
+    int carsCount;
+    int sitesCount;
+    int teamsCount;
     protected override async Task OnInitializedAsync()
     {
         Canvasser = await http.GetFromJsonAsync<CanvasserDetail>($"api/canvasser/{CanvasserId}");
+        carsCount = Canvasser.Cars.Count;
+        sitesCount = Canvasser.Sites.Count;
+        teamsCount = Canvasser.Teams.Count;
     }
 }

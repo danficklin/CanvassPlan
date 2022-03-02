@@ -18,6 +18,19 @@
                 @if (Car.Model != null) { <h4 class="card-title">Model: @Car.Model </h4> }
                 @if (Car.Year != 0) { <h4 class="card-title">Year: @Car.Year </h4> }                
             </div>
+            <div class="card-body">
+                @if(Car.Drivers?.LastOrDefault() != default) {
+                <h4 class="card-title">Assigned Canvasser: @Car.Drivers.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text"> No driver currently assigned.</p> }
+                @if(driversCount > 0)
+                {
+                    <h4>Past Canvassers</h4> 
+                    @foreach(CanvasserListItem c in Car.Drivers)
+                    {
+                        <h4>@c.Name</h4>
+                    }
+                } else { <p class="card-text">No drivers have been assigned to this vehicle.</p> }
+            </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left">Created: @Car.DateCreated</span>
                 @if (Car.DateModified != null) { <span class="text-right">Last Changed: @Car.DateModified</span>}
@@ -42,8 +55,10 @@ else
     [Parameter]
     public int CarId { get; set; }
     private CarDetail Car = new CarDetail();
+    int driversCount;
     protected override async Task OnInitializedAsync()
     {
         Car = await http.GetFromJsonAsync<CarDetail>($"api/car/{CarId}");
+        driversCount = Car.Drivers.Count;
     }
 }

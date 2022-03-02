@@ -168,8 +168,8 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             entity.AltPhone = model.AltPhone;
             entity.IsDriver = model.IsDriver;
             entity.IsLeader = model.IsLeader;
-            entity.IsTraining = model.IsLeader;
-            entity.IsAbsent = model.IsTraining;
+            entity.IsTraining = model.IsTraining;
+            entity.IsAbsent = model.IsAbsent;
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;

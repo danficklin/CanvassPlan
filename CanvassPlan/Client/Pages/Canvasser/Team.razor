@@ -37,7 +37,7 @@
     private async void HandleSubmit()
     {
         var editRes = await http.PutAsJsonAsync<CanvasserAddToTeam>($"/api/canvasser/team/{CanvasserId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{CanvasserId}"); }
-        else { ErrorMessage = "Could not edit this canvasser. Please try again."; }
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{model.TeamId}"); }
+        else { ErrorMessage = "Could add this canvasser to the team. Please try again."; }
     }
 }

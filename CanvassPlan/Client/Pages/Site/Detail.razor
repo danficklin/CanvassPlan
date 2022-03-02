@@ -9,7 +9,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span>Name: @Site.Name</span>
+                <span>@Site.Name</span>
                 <span class="text-muted"><strong>@Site.SiteId</strong></span>
             </div>
             <div class="card-body">
@@ -17,6 +17,19 @@
                 @if (Site.Drop != 0) { <h4 class="card-title">Drop Order: @Site.Drop </h4> }
                 @if (Site.DropDistance != 0) { <h4 class="card-title">Distance from Office: @Site.DropDistance miles </h4> }
                 @if (Site.DropAddress != null) { <h4 class="card-title">Address: @Site.DropAddress </h4> }              
+            </div>
+            <div class="card-body">
+                @if(Site.Canvassers?.LastOrDefault() != default) {
+                <h4 class="card-title">Assigned Canvasser: @Site.Canvassers.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text"> No canvasser currently assigned.</p> }
+                @if(canvassersCount > 0)
+                {
+                    <h4>Past Canvassers</h4> 
+                    @foreach(CanvasserListItem c in Site.Canvassers)
+                    {
+                        <h4>@c.Name</h4>
+                    }
+                } else { <p class="card-text">No canvassers currently assigned.</p> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left">Created: @Site.DateCreated</span>
@@ -42,8 +55,10 @@ else
     [Parameter]
     public int SiteId { get; set; }
     private SiteDetail Site = new SiteDetail();
+    int canvassersCount;
     protected override async Task OnInitializedAsync()
     {
         Site = await http.GetFromJsonAsync<SiteDetail>($"api/site/{SiteId}");
+        canvassersCount = Site.Canvassers.Count;
     }
 }
