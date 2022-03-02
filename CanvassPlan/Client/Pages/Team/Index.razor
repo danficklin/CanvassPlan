@@ -1,0 +1,45 @@
+﻿@page "/team"
+@attribute [Authorize]
+@inject HttpClient http
+
+<h3>Teams</h3>
+<a href="/team/create">Add a team</a>
+@if (_teams == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in _teams)
+            {
+                <tr>
+                    <td>@team.TeamId</td>
+                    <td>@team.Name</td>
+                    <td>
+                        <a href=@($"team/{team.TeamId}")>Details    |</a>
+                        <a href=@($"team/edit/{team.TeamId}")>Edit    |</a>
+                        <a href=@($"team/delete/{team.TeamId}")>Delete</a>
+                    </td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<TeamListItem> _teams;
+    protected override async Task OnInitializedAsync()
+    {
+        _teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
+    }
+}

@@ -26,6 +26,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             {
                 Name = model.Name,
                 Phone = model.Phone,
+                AltPhone = model.AltPhone,  
                 IsDriver = model.IsDriver,
                 IsLeader = model.IsLeader,
                 IsTraining = model.IsTraining,
@@ -48,9 +49,9 @@ namespace CanvassPlan.Server.Services.CanvasserServices
         public async Task<CanvasserDetail> GetCanvasserByIdAsync(int canvasserId)
         {
             var canvasserEntity = await _ctx.Canvassers
-                .Include(nameof(Car))
-                .Include(nameof(Team))
-                .Include(nameof(Site))
+                .Include(c => c.Cars)
+                .Include(t => t.Teams)
+                .Include(s => s.Sites)
                 .FirstOrDefaultAsync(c => c.CanvasserId == canvasserId && c.OwnerId == _userId);
             if (canvasserEntity is null) return null;
             var detail = new CanvasserDetail
@@ -83,14 +84,14 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 {
                     CanvasserId = s.CanvasserId,
                     Name = s.Name,
-                }).ToList(), 
+                }).ToList(),
                 DoPair = canvasserEntity.DoPair.Select(s => new CanvasserListItem
                 {
                     CanvasserId = s.CanvasserId,
                     Name = s.Name,
                 }).ToList(),
                 DateCreated = canvasserEntity.DateCreated,
-                DateModified = canvasserEntity.DateModified,   
+                DateModified = canvasserEntity.DateModified,
             };
             return detail;
         }
@@ -172,6 +173,38 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCarAsDriver model)
+        {
+            var canvasser = await _ctx.Canvassers.FindAsync(model.CarId);
+            var car = await _ctx.Cars
+                .Include(d => d.Drivers)
+                .FirstOrDefaultAsync(m => m.CarId == model.CarId);
+
+            if (model.CarId == canvasserId)
+            {
+                car.Drivers.Add(canvasser);
+                var numberOfChanges = await _ctx.SaveChangesAsync();
+                return numberOfChanges == 1;
+            }
+            return false;
+        }
+
+        public async Task<bool> AddCanvasserToTeamAsync(int canvasserId, CanvasserAddToTeam model)
+        {
+            var canvasser = await _ctx.Canvassers.FindAsync(model.TeamId);
+            var team = await _ctx.Teams
+                .Include(c => c.Canvassers)
+                .FirstOrDefaultAsync(m => m.TeamId == model.TeamId);
+
+            if (model.TeamId == canvasserId)
+            {
+                team.Canvassers.Add(canvasser);
+                var numberOfChanges = await _ctx.SaveChangesAsync();
+                return numberOfChanges == 1;
+            }
+            return false;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CanvassPlan.Server.Services.CarServices;
 using CanvassPlan.Shared.Models.Car;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -42,7 +41,7 @@ namespace CanvassPlan.Server.Controllers
             if (car == null) return NotFound();
             return Ok(car);
         }
-        [HttpGet("{name}")]
+        [HttpGet("/name/{name}")]
         public async Task<IActionResult> Car(string name)
         {
             if (!SetUserIdInService()) return Unauthorized();

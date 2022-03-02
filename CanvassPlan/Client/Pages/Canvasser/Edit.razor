@@ -1,0 +1,54 @@
+﻿@page "/canvasser/edit/{CanvasserId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<h3>Edit Canvasser: @Model.Name</h3>
+
+
+@if (ErrorMessage != null)
+{
+    <h5 class="text-danger">@ErrorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" />
+            <label>Work Phone Number</label>
+            <InputText class="form-control" @bind-Value="Model.Phone" />
+            <label>Personal Phone Number</label>
+            <InputText class="form-control" @bind-Value="Model.AltPhone" />
+            <label>In training?</label>
+            <InputCheckbox class="form-control" @bind-Value="Model.IsTraining" />
+            <label>Authorized to drive?</label>
+            <InputCheckbox class="form-control" @bind-Value="Model.IsDriver" />
+            <label>Team leader?</label>
+            <InputCheckbox class="form-control" @bind-Value="Model.IsLeader" />
+            <label>Is absent?</label>
+            <InputCheckbox class="form-control" @bind-Value="Model.IsAbsent" />
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code {
+    [Parameter]
+    public int CanvasserId { get; set; }
+    private CanvasserEdit Model = new CanvasserEdit();
+    private string ErrorMessage { get;  set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await http.GetFromJsonAsync<CanvasserEdit>($"/api/canvasser/{CanvasserId}");
+    }
+    private async void HandleSubmit()
+    {
+        var editRes = await http.PutAsJsonAsync<CanvasserEdit>($"/api/canvasser/edit/{CanvasserId}", Model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{CanvasserId}"); }
+        else { ErrorMessage = "Could not edit this canvasser. Please try again."; }
+    }
+}

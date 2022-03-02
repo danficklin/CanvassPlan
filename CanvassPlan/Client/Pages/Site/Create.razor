@@ -1,0 +1,46 @@
+﻿@page "/site/create"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (errorMessage != null)
+{
+    <h5 class="text-danger">@errorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="model.Name" />
+            <label>Area</label>
+            <InputText class="form-control" @bind-Value="model.Area" />
+            <label>Address</label>
+            <InputText class="form-control" @bind-Value="model.DropAddress" />
+            <label>Distance from Office</label>
+            <InputNumber class="form-control" @bind-Value="model.DropDistance" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code{
+    private SiteCreate model = new();
+    private string errorMessage;
+    private async void HandleSubmit()
+    {
+        var createRes = await http.PostAsJsonAsync<SiteCreate>("/api/site", model);
+        if (createRes.IsSuccessStatusCode)
+        {
+            navigation.NavigateTo("/site");
+        }
+        else
+        {
+            errorMessage = "Could not add the site at this time. Please try again later.";
+        }
+    }
+}
+

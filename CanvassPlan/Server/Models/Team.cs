@@ -8,12 +8,12 @@ namespace CanvassPlan.Server.Models
     {
         [Key]
         public int TeamId { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public string OwnerId { get; set; }
-        public ICollection<Canvasser> Canvassers { get; set; }
-        public ICollection<Car> Cars { get; set; }  
-        [Required]
+        public ICollection<Canvasser> Canvassers { get; set; } = new List<Canvasser>();   
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }
     }

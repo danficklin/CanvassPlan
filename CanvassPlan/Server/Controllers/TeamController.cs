@@ -1,6 +1,5 @@
 ﻿using CanvassPlan.Server.Services.TeamServices;
 using CanvassPlan.Shared.Models.Team;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -45,7 +44,7 @@ namespace CanvassPlan.Server.Controllers
             if (team == null) return NotFound();
             return Ok(team);
         }
-        [HttpGet("{name}")]
+        [HttpGet("/name/{name}")]
         public async Task<IActionResult> Team(string name)
         {
             if (!SetUserIdInService()) return Unauthorized();

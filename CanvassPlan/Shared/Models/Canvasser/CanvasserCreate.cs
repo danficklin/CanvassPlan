@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CanvassPlan.Shared.Models.Canvasser
 {
@@ -14,11 +9,8 @@ namespace CanvassPlan.Shared.Models.Canvasser
         [Required]
         public string Phone { get; set; }
         public string AltPhone { get; set; }
-        [Required]
         public bool IsDriver { get; set; }
-        [Required]
         public bool IsLeader { get; set; }
-        [Required]
         public bool IsTraining { get; set; }
     }
 }

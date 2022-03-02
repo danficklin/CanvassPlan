@@ -1,10 +1,10 @@
 ﻿@page "/canvasser"
-@inject HttpClient Http
 @attribute [Authorize]
+@inject HttpClient http
 
 <h3>Canvassers</h3>
 <a href="/canvasser/create">Add a canvasser</a>
-@if (canvassers == null)
+@if (_canvassers == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -15,24 +15,31 @@ else
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (CanvasserListItem canvasser in canvassers)
+            @foreach (var canvasser in _canvassers)
             {
                 <tr>
                     <td>@canvasser.CanvasserId</td>
                     <td>@canvasser.Name</td>
+                    <td>
+                        <a href=@($"canvasser/{canvasser.CanvasserId}")>Details    |</a>
+                        <a href=@($"canvasser/edit/{canvasser.CanvasserId}")>Edit    |</a>
+                        <a href=@($"canvasser/delete/{canvasser.CanvasserId}")>Delete</a>
+                    </td>
                 </tr>
+                
             }
         </tbody>
     </table>
 }
 
 @code {
-    private List<CanvasserListItem> canvassers;
+    private List<CanvasserListItem> _canvassers;
     protected override async Task OnInitializedAsync()
     {
-        canvassers = await Http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
+        _canvassers = await http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
     }
 }

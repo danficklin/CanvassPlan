@@ -1,6 +1,5 @@
 ﻿using CanvassPlan.Server.Services.SiteServices;
 using CanvassPlan.Shared.Models.Site;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -46,7 +45,7 @@ namespace CanvassPlan.Server.Controllers
             return Ok(site);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("/name/{name}")]
         public async Task<IActionResult> Site(string name)
         {
             if (!SetUserIdInService()) return Unauthorized();

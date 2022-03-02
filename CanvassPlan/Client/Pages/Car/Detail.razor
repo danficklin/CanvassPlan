@@ -1,0 +1,49 @@
+﻿@page "/car/{CarId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+
+
+@if (Car!= null)
+{
+   <h3>Car</h3>
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span>Name: @Car.Name</span>
+                <span class="text-muted"><strong>@Car.CarId</strong></span>
+            </div>
+            <div class="card-body">
+                @if (Car.Seatbelts != 0) { <h4 class="card-title">Seatbelts: @Car.Seatbelts </h4> }
+                @if (Car.Make != null) { <h4 class="card-title">Make: @Car.Make </h4> }
+                @if (Car.Model != null) { <h4 class="card-title">Model: @Car.Model </h4> }
+                @if (Car.Year != 0) { <h4 class="card-title">Year: @Car.Year </h4> }                
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between">
+                <span class="text-left">Created: @Car.DateCreated</span>
+                @if (Car.DateModified != null) { <span class="text-right">Last Changed: @Car.DateModified</span>}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-25">
+                <a href=@($"/car/edit/{CarId}") class="btn btn-outline-primary">Edit</a>
+                <a href=@($"/car/delete/{CarId}") class="btn btn-outline-danger">Delete</a>
+                <hr />
+                <a href="/car">Back to List of Cars</a>
+            </div>
+        </div>
+    </div> 
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+    private CarDetail Car = new CarDetail();
+    protected override async Task OnInitializedAsync()
+    {
+        Car = await http.GetFromJsonAsync<CarDetail>($"api/car/{CarId}");
+    }
+}

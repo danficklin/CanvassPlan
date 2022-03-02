@@ -1,6 +1,6 @@
 ﻿@page "/canvasser/create"
 @attribute [Authorize]
-@inject HttpClient Http
+@inject HttpClient http
 @inject NavigationManager navigation
 
 @if (errorMessage != null)
@@ -9,15 +9,25 @@
 }
 
 <div class="container">
-    @*<EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
             <label>Name</label>
             <InputText class="form-control" @bind-Value="model.Name" />
+            <label>Work Phone Number</label>
+            <InputText class="form-control" @bind-Value="model.Phone" />
+            <label>Personal Phone Number</label>
+            <InputText class="form-control" @bind-Value="model.AltPhone" />
+            <label>In training?</label>
+            <InputCheckbox class="form-control" @bind-Value="model.IsTraining" />
+            <label>Authorized to drive?</label>
+            <InputCheckbox class="form-control" @bind-Value="model.IsDriver" />
+            <label>Team leader?</label>
+            <InputCheckbox class="form-control" @bind-Value="model.IsLeader" />
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
-    </EditForm> *@
+    </EditForm> 
 </div>
 
 @code{
@@ -25,7 +35,7 @@
     private string errorMessage;
     private async void HandleSubmit()
     {
-        var createRes = await Http.PostAsJsonAsync<CanvasserCreate>("/api/canvasser", model);
+        var createRes = await http.PostAsJsonAsync<CanvasserCreate>("/api/canvasser", model);
         if (createRes.IsSuccessStatusCode)
         {
             navigation.NavigateTo("/canvasser");

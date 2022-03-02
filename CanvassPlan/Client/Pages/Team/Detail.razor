@@ -1,0 +1,58 @@
+﻿@page "/team/{TeamId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+
+
+@if (Team!= null)
+{
+   <h3>Team</h3>
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span>Name: @Team.Name</span>
+                <span class="text-muted"><strong>@Team.TeamId</strong></span>
+            </div>
+            <div class="card-body">
+                @if(Team.Cars?.LastOrDefault() != default) {
+                <h4 class="card-title">Team: @Team.Cars.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text"> No car currently assigned.</p> }
+                @if(canvassersCount > 0)
+                {
+                    <h4>Canvassers</h4> 
+                    @foreach(CanvasserListItem c in Team.Canvassers)
+                    {
+                        <h4>@c.Name</h4>
+                    }
+                } else { <p class="card-text">No canvassers currently assigned.</p> }
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between">
+                <span class="text-left">Created: @Team.DateCreated</span>
+                @if (Team.DateModified != null) { <span class="text-right">Last Changed: @Team.DateModified</span>}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-25">
+                <a href=@($"/team/edit/{TeamId}") class="btn btn-outline-primary">Edit</a>
+                <a href=@($"/team/delete/{TeamId}") class="btn btn-outline-danger">Delete</a>
+                <hr />
+                <a href="/team">Back to List of Teams</a>
+            </div>
+        </div>
+    </div> 
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int TeamId { get; set; }
+    private TeamDetail Team { get; set; } = new TeamDetail();
+    int canvassersCount;
+    protected override async Task OnInitializedAsync()
+    {
+        Team = await http.GetFromJsonAsync<TeamDetail>($"api/team/{TeamId}");
+        canvassersCount = Team.Canvassers.Count;
+    }
+}

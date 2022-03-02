@@ -28,7 +28,9 @@ namespace CanvassPlan.Server.Services.CarServices
                 Seatbelts = model.Seatbelts,
                 Make = model.Make,
                 Model = model.Model,
-                Year = model.Year
+                Year = model.Year,
+                DateCreated = DateTimeOffset.Now,
+                OwnerId = _userId
             };
             _ctx.Cars.Add(carEntity);
             return await _ctx.SaveChangesAsync() == 1;
@@ -45,9 +47,8 @@ namespace CanvassPlan.Server.Services.CarServices
         public async Task<CarDetail> GetCarByIdAsync(int carId)
         {
             var entity = await _ctx.Cars
-                .Include(nameof(Canvasser))
-                .Include(nameof(Site))
-                .Include(nameof(Team))
+                .Include(c => c.Drivers)
+                .Include(t => t.Teams)
                 .FirstOrDefaultAsync(c => c.CarId == carId && c.OwnerId == _userId);
             if (entity is null) return null;
             var detail = new CarDetail
