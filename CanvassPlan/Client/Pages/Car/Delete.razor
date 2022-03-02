@@ -1,0 +1,49 @@
+﻿@page "/car/delete/{CarId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<h3>Delete @Car.Name</h3>
+
+@if (Message != null)
+{
+    <h2 class="text-danger">@Message</h2>
+}
+@if (Car != null)
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span>Name: @Car.Name</span>
+                <span class="text-muted"><strong>ID: @Car.CarId</strong></span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <a href=@($"/car/{CarId}") class="btn btn-outline-primary">View Details</a>
+                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Car</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+    private CarDetail Car = new CarDetail();
+    public string Message { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Car = await http.GetFromJsonAsync<CarDetail>($"/api/car/{CarId}");
+    }
+    private async void HandleClick()
+    {
+        var deleteRes = await http.DeleteAsync($"/api/car/delete/{CarId}");
+        if(deleteRes.IsSuccessStatusCode) { navigation.NavigateTo("/car"); } 
+        else { Message = "Failed to delete car. Please try again."; }
+    }
+}

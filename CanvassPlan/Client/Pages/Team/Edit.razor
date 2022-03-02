@@ -1,0 +1,43 @@
+﻿@page "/team/edit/{teamId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<h3>Edit Team: @Model.Name</h3>
+
+
+@if (ErrorMessage != null)
+{
+    <h5 class="text-danger">@ErrorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code {
+    [Parameter]
+    public int teamId { get; set; }
+    private TeamEdit Model = new TeamEdit();
+    private string ErrorMessage { get;  set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await http.GetFromJsonAsync<TeamEdit>($"/api/team/{teamId}");
+    }
+    private async void HandleSubmit()
+    {
+        var editRes = await http.PutAsJsonAsync<TeamEdit>($"/api/team/edit/{teamId}", Model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{teamId}"); }
+        else { ErrorMessage = "Could not edit this team. Please try again."; }
+    }
+}

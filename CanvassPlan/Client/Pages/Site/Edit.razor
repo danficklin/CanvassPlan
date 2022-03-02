@@ -1,0 +1,49 @@
+﻿@page "/site/edit/{SiteId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<h3>Edit Site: @Model.Name</h3>
+
+
+@if (ErrorMessage != null)
+{
+    <h5 class="text-danger">@ErrorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" />
+            <label>Area</label>
+            <InputText class="form-control" @bind-Value="Model.Area" />
+            <label>Address</label>
+            <InputText class="form-control" @bind-Value="Model.DropAddress" />
+            <label>Distance from Office</label>
+            <InputNumber class="form-control" @bind-Value="Model.DropDistance" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code {
+    [Parameter]
+    public int SiteId { get; set; }
+    private SiteEdit Model = new SiteEdit();
+    private string ErrorMessage { get;  set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await http.GetFromJsonAsync<SiteEdit>($"/api/site/{SiteId}");
+    }
+    private async void HandleSubmit()
+    {
+        var editRes = await http.PutAsJsonAsync<SiteEdit>($"/api/site/edit/{SiteId}", Model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/site/{SiteId}"); }
+        else { ErrorMessage = "Could not edit this site. Please try again."; }
+    }
+}

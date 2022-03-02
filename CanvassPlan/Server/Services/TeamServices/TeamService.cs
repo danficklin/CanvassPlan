@@ -23,6 +23,8 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = new Team
             {
                 Name = model.Name,
+                DateCreated = DateTimeOffset.Now,
+                OwnerId = _userId
             };
             _ctx.Teams.Add(entity);
             var numberOfChanges = await _ctx.SaveChangesAsync();
@@ -40,8 +42,8 @@ namespace CanvassPlan.Server.Services.TeamServices
         public async Task<TeamDetail> GetTeamByIdAsync(int teamId)
         {
             var entity = await _ctx.Teams
-                .Include(nameof(Canvasser))
-                .Include(nameof(Car))
+                .Include(c => c.Canvassers)
+                .Include(r => r.Cars)
                 .FirstOrDefaultAsync(t => t.TeamId == teamId && t.OwnerId == _userId);
             if (entity is null) return null;
             var detail = new TeamDetail

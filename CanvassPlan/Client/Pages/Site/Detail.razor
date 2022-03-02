@@ -1,0 +1,49 @@
+﻿@page "/site/{siteId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+
+
+@if (Site!= null)
+{
+   <h3>Site</h3>
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span>Name: @Site.Name</span>
+                <span class="text-muted"><strong>@Site.SiteId</strong></span>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Area: @Site.Area </h4>
+                @if (Site.Drop != 0) { <h4 class="card-title">Drop Order: @Site.Drop </h4> }
+                @if (Site.DropDistance != 0) { <h4 class="card-title">Distance from Office: @Site.DropDistance miles </h4> }
+                @if (Site.DropAddress != null) { <h4 class="card-title">Address: @Site.DropAddress </h4> }              
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between">
+                <span class="text-left">Created: @Site.DateCreated</span>
+                @if (Site.DateModified != null) { <span class="text-right">Last Changed: @Site.DateModified</span>}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-25">
+                <a href=@($"/site/edit/{SiteId}") class="btn btn-outline-primary">Edit</a>
+                <a href=@($"/site/delete/{SiteId}") class="btn btn-outline-danger">Delete</a>
+                <hr />
+                <a href="/site">Back to List of Sites</a>
+            </div>
+        </div>
+    </div> 
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int SiteId { get; set; }
+    private SiteDetail Site = new SiteDetail();
+    protected override async Task OnInitializedAsync()
+    {
+        Site = await http.GetFromJsonAsync<SiteDetail>($"api/site/{SiteId}");
+    }
+}

@@ -11,26 +11,19 @@ namespace CanvassPlan.Server.Models
         public int CanvasserId { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
         public string OwnerId { get; set; }
-        [Required]
         public string Phone { get; set; }
         public string AltPhone { get; set; }
-        [Required]
         public bool IsDriver { get; set; }
-        [Required]
         public bool IsLeader { get; set; }
-        [Required]
         public bool IsTraining { get; set; }
-        [Required]
         public bool IsAbsent { get; set; }
-        [Required]
         public bool DroveYesterday { get; set; }
-        public virtual ICollection<Team> Teams { get; set; }
-        public virtual ICollection<Car> Cars { get; set; }
-        public virtual ICollection<Site> Sites { get; set; }
-        public virtual ICollection<Canvasser> DoNotPair { get; set; }
-        public virtual ICollection<Canvasser> DoPair { get; set; }
+        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+        public virtual ICollection<Car> Cars { get; set; } = new List<Car>();
+        public virtual ICollection<Site> Sites { get; set; } = new List<Site>();
+        public virtual ICollection<Canvasser> DoNotPair { get; set; } = new List <Canvasser>();
+        public virtual ICollection<Canvasser> DoPair { get; set; } = new List<Canvasser>();
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }
     }

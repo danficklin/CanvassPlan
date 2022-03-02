@@ -6,7 +6,6 @@ namespace CanvassPlan.Shared.Models.Car
     {
         [Required]
         public int CarId { get; set; }
-        [Required]
         public string Name { get; set; }
         public int Seatbelts { get; set; }
         public string Make { get; set; }

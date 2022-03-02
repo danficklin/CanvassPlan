@@ -1,6 +1,5 @@
 ﻿using CanvassPlan.Server.Services.CanvasserServices;
 using CanvassPlan.Shared.Models.Canvasser;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -45,7 +44,7 @@ namespace CanvassPlan.Server.Controllers
             if (canvasser == null) return NotFound();
             return Ok(canvasser);
         }
-        [HttpGet("{name}")]
+        [HttpGet("name/{name}")]
         public async Task<IActionResult> Canvasser(string name)
         {
             if (!SetUserIdInService()) return Unauthorized();
@@ -82,6 +81,28 @@ namespace CanvassPlan.Server.Controllers
             if(!wasSuccessful) return BadRequest();
             return Ok();
         }
-        
+        [HttpPut("team/{id}")]
+        public async Task<IActionResult> AddCanvasserToTeam(int canvasserId, CanvasserAddToTeam model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return await _canvasserService.AddCanvasserToTeamAsync(canvasserId, model)
+                ? Ok("Canvasser was added to the team successfully!")
+                : BadRequest("Canvasser could not be added to the team. Please try again.");
+        }
+        [HttpPut("car/{id}")]
+        public async Task<IActionResult> AddCanvasserToCar(int canvasserId, CanvasserAddToCarAsDriver model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return await _canvasserService.AddCanvasserToCarAsync(canvasserId, model)
+                ? Ok("Canvasser was added to the car successfully!")
+                : BadRequest("Canvasser could not be added to the car. Please try again.");
+        }
+
     }
 }

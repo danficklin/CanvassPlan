@@ -1,0 +1,51 @@
+﻿@page "/car/edit/{CarId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<h3>Edit Car: @Model.Name</h3>
+
+
+@if (ErrorMessage != null)
+{
+    <h5 class="text-danger">@ErrorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="Model.Name" />
+            <label>Seatbelts</label>
+            <InputNumber class="form-control" @bind-Value="Model.Seatbelts" />
+            <label>Make</label>
+            <InputText class="form-control" @bind-Value="Model.Make" />
+            <label>Model</label>
+            <InputText class="form-control" @bind-Value="Model.Model" />
+            <label>Year</label>
+            <InputNumber class="form-control" @bind-Value="Model.Year" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+    private CarEdit Model = new CarEdit();
+    private string ErrorMessage { get;  set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await http.GetFromJsonAsync<CarEdit>($"/api/car/{CarId}");
+    }
+    private async void HandleSubmit()
+    {
+        var editRes = await http.PutAsJsonAsync<CarEdit>($"/api/car/edit/{CarId}", Model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{CarId}"); }
+        else { ErrorMessage = "Could not edit this car. Please try again."; }
+    }
+}

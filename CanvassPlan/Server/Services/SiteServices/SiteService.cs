@@ -23,8 +23,11 @@ namespace CanvassPlan.Server.Services.SiteServices
             var entity = new Site
             {
                 Name = model.Name,
+                Area = model.Area,
                 DropDistance = model.DropDistance,
-                DropAddress = model.DropAddress
+                DropAddress = model.DropAddress,
+                DateCreated = DateTimeOffset.Now,
+                OwnerId = _userId
             };
             _ctx.Sites.Add(entity);
             var numberOfChanges = await _ctx.SaveChangesAsync();
@@ -42,14 +45,13 @@ namespace CanvassPlan.Server.Services.SiteServices
         public async Task<SiteDetail> GetSiteByIdAsync(int siteId)
         {
             var entity = await _ctx.Sites
-                .Include(nameof(Car))
-                .Include(nameof(Team))
-                .Include(nameof(Canvasser))
+                .Include(c => c.Canvassers)
                 .FirstOrDefaultAsync(s => s.SiteId == siteId && s.OwnerId == _userId);
             var detail = new SiteDetail
             {
                 SiteId = siteId,
                 Name = entity.Name,
+                Area = entity.Area,
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
@@ -74,6 +76,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             {
                 SiteId = entity.SiteId,
                 Name = name,
+                Area = entity.Area,
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
@@ -106,6 +109,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             var entity = await _ctx.Sites.FindAsync(model.SiteId);  
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Area = model.Area;
             entity.DropDistance = model.DropDistance;   
             entity.DropAddress = model.DropAddress;
             entity.DateModified = DateTimeOffset.Now;

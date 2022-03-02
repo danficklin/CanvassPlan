@@ -1,0 +1,49 @@
+﻿@page "/canvasser/delete/{CanvasserId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<h3>Delete @Canvasser.Name</h3>
+
+@if (Message != null)
+{
+    <h2 class="text-danger">@Message</h2>
+}
+@if (Canvasser != null)
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span>Name: @Canvasser.Name</span>
+                <span class="text-muted"><strong>ID: @Canvasser.CanvasserId</strong></span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <a href=@($"/canvasser/{CanvasserId}") class="btn btn-outline-primary">View Details</a>
+                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Canvasser</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int CanvasserId { get; set; }
+    private CanvasserDetail Canvasser = new CanvasserDetail();
+    public string Message { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Canvasser = await http.GetFromJsonAsync<CanvasserDetail>($"/api/canvasser/{CanvasserId}");
+    }
+    private async void HandleClick()
+    {
+        var deleteRes = await http.DeleteAsync($"/api/canvasser/delete/{CanvasserId}");
+        if(deleteRes.IsSuccessStatusCode) { navigation.NavigateTo("/canvasser"); } 
+        else { Message = "Failed to delete canvasser. Please try again."; }
+    }
+}

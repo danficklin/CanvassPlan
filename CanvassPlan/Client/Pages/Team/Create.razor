@@ -1,0 +1,40 @@
+﻿@page "/team/create"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (errorMessage != null)
+{
+    <h5 class="text-danger">@errorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="model.Name" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code{
+    private TeamCreate model = new();
+    private string errorMessage;
+    private async void HandleSubmit()
+    {
+        var createRes = await http.PostAsJsonAsync<TeamCreate>("/api/team", model);
+        if (createRes.IsSuccessStatusCode)
+        {
+            navigation.NavigateTo("/team");
+        }
+        else
+        {
+            errorMessage = "Could not add the team at this time. Please try again later.";
+        }
+    }
+}
+

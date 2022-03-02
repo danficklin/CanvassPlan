@@ -24,17 +24,11 @@ namespace CanvassPlan.Client
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CanvassPlan.ServerAPI"));
 
-            // builder.Services.AddApiAuthorization(); 
+            builder.Services.AddApiAuthorization(); 
 
-            builder.Services.AddOidcAuthentication(options =>
-            {
-                builder.Configuration.Bind("Local", options.ProviderOptions);
-            });
+         
 
             await builder.Build().RunAsync();
-
-            
-
         }
     }
 }
