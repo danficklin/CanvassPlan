@@ -71,6 +71,14 @@ namespace CanvassPlan.Server.Controllers
             if (wasSuccessful) return Ok();
             return BadRequest();
         }
+        [HttpPut("clear")]
+        public async Task<IActionResult> Clear()
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            bool wasSuccessful = await _teamService.ClearTeamsAsync();
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

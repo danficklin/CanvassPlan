@@ -13,7 +13,8 @@ namespace CanvassPlan.Shared.Models.Car
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
-        public ICollection<CanvasserListItem> Drivers { get; set; }
+        public bool IsActive { get; set; }
+        public ICollection<CanvasserListItem> Riders { get; set; }
         public ICollection<TeamListItem> Teams { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }

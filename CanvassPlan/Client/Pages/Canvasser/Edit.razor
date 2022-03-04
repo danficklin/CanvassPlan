@@ -4,7 +4,7 @@
 @inject NavigationManager navigation
 
 
-<h3>Edit Canvasser: @Model.Name</h3>
+<h3 class="text-center">Edit Canvasser: @Model.Name</h3>
 
 
 @if (ErrorMessage != null)
@@ -16,19 +16,36 @@
     <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <div class="form-group">
+        <div class="form-group text-center">
             <label>Name: <InputText class="form-control" @bind-Value="Model.Name" /></label>
+            <hr />
             <label>Work Phone Number<InputText class="form-control" @bind-Value="Model.Phone" /></label>
+            <hr />
             <label>Personal Phone Number<InputText class="form-control" @bind-Value="Model.AltPhone" /></label>
             <hr />
             <label>In training?<InputCheckbox class="form-control" @bind-Value="Model.IsTraining" /></label>
+            <hr />
             <label>Authorized to drive?<InputCheckbox class="form-control" @bind-Value="Model.IsDriver" /></label>
+            <hr />
             <label>Team leader?<InputCheckbox class="form-control" @bind-Value="Model.IsLeader" /></label>
+            <hr />
             <label>Is absent?<InputCheckbox class="form-control" @bind-Value="Model.IsAbsent" /></label>
+            <hr />
+            <label>Is inactive?<InputCheckbox class="form-control" @bind-Value="Model.IsActive" /></label>
             
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
     </EditForm> 
+    <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-25">
+                <a href=@($"/canvasser/delete/{CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                <a href=@($"/canvasser/team/{CanvasserId}") class="btn btn-outline-success">Add to Team</a>
+                <a href=@($"/canvasser/car/{CanvasserId}") class="btn btn-outline-success">Add to Car</a>
+                <a href=@($"/canvasser/site/{CanvasserId}") class="btn btn-outline-success">Add to Site</a>
+                <hr />
+                <a href="/canvasser">Back to List of Canvassers</a>
+            </div>
+        </div>
 </div>
 
 @code {

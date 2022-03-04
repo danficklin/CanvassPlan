@@ -29,6 +29,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = model.Make,
                 Model = model.Model,
                 Year = model.Year,
+                IsActive = true,
                 DateCreated = DateTimeOffset.Now,
                 OwnerId = _userId
             };
@@ -47,7 +48,7 @@ namespace CanvassPlan.Server.Services.CarServices
         public async Task<CarDetail> GetCarByIdAsync(int carId)
         {
             var entity = await _ctx.Cars
-                .Include(c => c.Drivers)
+                .Include(c => c.Riders)
                 .Include(t => t.Teams)
                 .FirstOrDefaultAsync(c => c.CarId == carId && c.OwnerId == _userId);
             if (entity is null) return null;
@@ -59,7 +60,8 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                Drivers = entity.Drivers.Select(t => new CanvasserListItem
+                IsActive = entity.IsActive,
+                Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
                     Name = t.Name
@@ -91,7 +93,8 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                Drivers = entity.Drivers.Select(t => new CanvasserListItem
+                IsActive = entity.IsActive,
+                Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
                     Name = t.Name
@@ -129,6 +132,7 @@ namespace CanvassPlan.Server.Services.CarServices
             entity.Make = model.Make;
             entity.Model = model.Model;
             entity.Year = model.Year;
+            entity.IsActive = model.IsActive;
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;

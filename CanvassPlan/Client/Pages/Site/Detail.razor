@@ -9,31 +9,32 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span>@Site.Name</span>
-                <span class="text-muted"><strong>@Site.SiteId</strong></span>
+                <span class="text-dark">@Site.Name</span>
+                <span class="text-muted text-dark"><strong>@Site.SiteId</strong></span>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Area: @Site.Area </h4>
-                @if (Site.Drop != 0) { <h4 class="card-title">Drop Order: @Site.Drop </h4> }
-                @if (Site.DropDistance != 0) { <h4 class="card-title">Distance from Office: @Site.DropDistance miles </h4> }
-                @if (Site.DropAddress != null) { <h4 class="card-title">Address: @Site.DropAddress </h4> }              
+                <h4 class="card-title text-dark">Area: @Site.Area </h4>
+                @if (Site.Drop != 0) { <h4 class="card-title text-dark">Drop Order: @Site.Drop </h4> }
+                @if (Site.DropDistance != 0) { <h4 class="card-title text-dark">Distance from Office: @Site.DropDistance miles </h4> }
+                @if (Site.DropAddress != null) { <h4 class="card-title text-dark">Address: @Site.DropAddress </h4> }  
+                @if (Site.IsActive == false) { <h4 class="card-title text-dark">This site is inactive. </h4> }
             </div>
             <div class="card-body">
                 @if(Site.Canvassers?.LastOrDefault() != default) {
-                <h4 class="card-title">Assigned Canvasser: @Site.Canvassers.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text"> No canvasser currently assigned.</p> }
+                <h4 class="card-title text-dark">Assigned Canvasser: @Site.Canvassers.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> No canvasser currently assigned.</p> }
                 @if(canvassersCount > 0)
                 {
-                    <h4>Past Canvassers</h4> 
+                    <h4 class="text-dark">Past Canvassers</h4> 
                     @foreach(CanvasserListItem c in Site.Canvassers)
                     {
                         <h4>@c.Name</h4>
                     }
-                } else { <p class="card-text">No canvassers currently assigned.</p> }
+                } else { <p class="card-text text-dark">No canvassers currently assigned.</p> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
-                <span class="text-left">Created: @Site.DateCreated</span>
-                @if (Site.DateModified != null) { <span class="text-right">Last Changed: @Site.DateModified</span>}
+                <span class="text-left text-dark">Created: @Site.DateCreated</span>
+                @if (Site.DateModified != null) { <span class="text-right text-dark">Last Changed: @Site.DateModified</span>}
             </div>
         </div>
         <div class="d-flex justify-content-center mt-3">

@@ -1,10 +1,10 @@
-﻿@page "/canvasser/team/{CanvasserId:int}"
+﻿@page "/canvasser/car/{CanvasserId:int}"
 @attribute [Authorize]
 @inject HttpClient http
 @inject NavigationManager navigation
 
 
-<h3>Add to Team</h3>
+<h3>Add to Car</h3>
 
 
 @if (ErrorMessage != null)
@@ -17,8 +17,8 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
-            <label>Which team ID?</label>
-            <InputNumber class="form-control" @bind-Value="model.TeamId" />
+            <label>Which car ID?</label>
+            <InputNumber class="form-control" @bind-Value="model.CarId" />
             
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
@@ -28,16 +28,16 @@
 @code {
     [Parameter]
     public int CanvasserId { get; set; }
-    private CanvasserAddToTeam model = new CanvasserAddToTeam();
+    private CanvasserAddToCar model = new CanvasserAddToCar();
     private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        model = await http.GetFromJsonAsync<CanvasserAddToTeam>($"/api/canvasser/{CanvasserId}");
+        model = await http.GetFromJsonAsync<CanvasserAddToCar>($"/api/canvasser/{CanvasserId}");
     }
     private async void HandleSubmit()
     {
-        var editRes = await http.PutAsJsonAsync<CanvasserAddToTeam>($"/api/canvasser/team/{CanvasserId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{model.TeamId}"); }
-        else { ErrorMessage = "Could add this canvasser to the team. Please try again."; }
+        var editRes = await http.PutAsJsonAsync<CanvasserAddToCar>($"/api/canvasser/car/{CanvasserId}", model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{model.CarId}"); }
+        else { ErrorMessage = "Could add this canvasser to the car. Please try again."; }
     }
 }

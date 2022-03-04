@@ -24,6 +24,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             {
                 Name = model.Name,
                 DateCreated = DateTimeOffset.Now,
+                IsActive = true,
                 OwnerId = _userId
             };
             _ctx.Teams.Add(entity);
@@ -36,7 +37,14 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = await _ctx.Teams.FindAsync(teamId);
             if (entity?.OwnerId != _userId) return false;
             _ctx.Teams.Remove(entity);
-            return await _ctx.SaveChangesAsync() == 1;   
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> DeleteAllTeamsAsync()
+        {
+            var entity = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
+            _ctx.RemoveRange(entity);
+            return await _ctx.SaveChangesAsync() == 1;
         }
 
         public async Task<TeamDetail> GetTeamByIdAsync(int teamId)
@@ -50,6 +58,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             {
                 TeamId = teamId,
                 Name = entity.Name,
+                IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -77,6 +86,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             {
                 TeamId = entity.TeamId,
                 Name = name,
+                IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -111,12 +121,24 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = await _ctx.Teams.FindAsync(model.TeamId);
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.IsActive = model.IsActive;
             entity.DateModified = DateTimeOffset.Now;
             return await _ctx.SaveChangesAsync() == 1;
         }
 
-        //public async Task<bool> GenerateTeamAsync(TeamGenerate model)
+        public async Task<bool> ClearTeamsAsync()
+        {
+            var entity = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
+            foreach (Team t in entity) { t.IsActive = false; }
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        //public async Task<bool> GeneratePlanAsync()
         //{
+        //    var canvasser = await _ctx.Canvassers.Where(v => v.OwnerId == _userId).ToListAsync();
+        //    var car = await _ctx.Cars.Where(c => c.OwnerId == _userId).ToListAsync();
+        //    var team = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
+        //    var site = await _ctx.Sites.Where(s => s.OwnerId == _userId).ToListAsync();
 
         //}
     }

@@ -10,7 +10,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -25,9 +25,9 @@ else
                     <td>@car.CarId</td>
                     <td>@car.Name</td>
                     <td>
-                        <a href=@($"car/{car.CarId}")>Details    |</a>
-                        <a href=@($"car/edit/{car.CarId}")>Edit    |</a>
-                        <a href=@($"car/delete/{car.CarId}")>Delete</a>
+                        <a href=@($"car/{car.CarId}") class="btn btn-outline-info">Details</a>
+                        <a href=@($"car/edit/{car.CarId}") class="btn btn-outline-secondary">Edit</a>
+                        <a href=@($"car/delete/{car.CarId}") class="btn btn-outline-danger">Delete</a>
                     </td>
                 </tr>
                 

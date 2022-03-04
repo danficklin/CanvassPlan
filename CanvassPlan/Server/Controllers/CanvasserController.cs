@@ -81,7 +81,7 @@ namespace CanvassPlan.Server.Controllers
             if(!wasSuccessful) return BadRequest();
             return Ok();
         }
-        [HttpPut("team/{id}")]
+        [HttpPut("team/{canvasserId}")]
         public async Task<IActionResult> AddCanvasserToTeam(int canvasserId, CanvasserAddToTeam model)
         {
             if (!ModelState.IsValid)
@@ -92,14 +92,25 @@ namespace CanvassPlan.Server.Controllers
                 ? Ok("Canvasser was added to the team successfully!")
                 : BadRequest("Canvasser could not be added to the team. Please try again.");
         }
-        [HttpPut("car/{id}")]
-        public async Task<IActionResult> AddCanvasserToCar(int canvasserId, CanvasserAddToCarAsDriver model)
+        [HttpPut("car/{canvasserId}")]
+        public async Task<IActionResult> AddCanvasserToCar(int canvasserId, CanvasserAddToCar model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             return await _canvasserService.AddCanvasserToCarAsync(canvasserId, model)
+                ? Ok("Canvasser was added to the car successfully!")
+                : BadRequest("Canvasser could not be added to the car. Please try again.");
+        }
+        [HttpPut("site/{canvasserId}")]
+        public async Task<IActionResult> AddCanvasserToSite(int canvasserId, CanvasserAddToSite model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return await _canvasserService.AddCanvasserToSiteAsync(canvasserId, model)
                 ? Ok("Canvasser was added to the car successfully!")
                 : BadRequest("Canvasser could not be added to the car. Please try again.");
         }

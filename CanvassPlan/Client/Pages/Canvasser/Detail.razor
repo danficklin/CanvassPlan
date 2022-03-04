@@ -9,53 +9,57 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span>Name: @Canvasser.Name</span>
-                <span class="text-muted"><strong>@Canvasser.CanvasserId</strong></span>
+                <span class="text-dark">Name: @Canvasser.Name</span>
+                <span class="text-muted text-dark"><strong>@Canvasser.CanvasserId</strong></span>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Work Phone Number: @Canvasser.Phone </h4>
+                <h4 class="card-title text-dark">Work Phone Number: @Canvasser.Phone </h4>
 
                 @if (Canvasser.AltPhone != null) {
-                    <h4 class="card-title">Personal Phone Number: @Canvasser.AltPhone </h4>
+                    <h4 class="card-title text-dark">Personal Phone Number: @Canvasser.AltPhone </h4>
                 }
 
                 @if(Canvasser.Teams?.LastOrDefault() != default) {
-                <h4 class="card-title">Team: @Canvasser.Teams.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text"> Not currently assigned to a team.</p>}
+                <h4 class="card-title text-dark">Team: @Canvasser.Teams.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> Not currently assigned to a team.</p>}
 
                 @if(Canvasser.Sites?.LastOrDefault() != default) {
-                <h4 class="card-title">Site: @Canvasser.Sites.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text"> Not currently assigned to a site.</p>}
+                <h4 class="card-title text-dark">Site: @Canvasser.Sites.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> Not currently assigned to a site.</p>}
 
                 @if(Canvasser.Cars?.LastOrDefault() != default) {
-                <h4 class="card-title">Site: @Canvasser.Cars.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text"> Not currently assigned to a car.</p>}
+                <h4 class="card-title text-dark">Car: @Canvasser.Cars.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> Not currently assigned to a car.</p>}
 
-                @if(Canvasser.IsAbsent == true) { <p class="card-text">This canvasser is absent.</p>}
+                @if(Canvasser.IsAbsent == true) { <p class="card-text text-dark">This canvasser is absent.</p>}
 
-                @if(Canvasser.IsDriver == true) { <p class="card-text">This canvasser is qualified to drive.</p>}
+                @if(Canvasser.IsDriver == true) { <p class="card-text text-dark">This canvasser is qualified to drive.</p>}
                 
-                @if(Canvasser.DroveYesterday == true) { <p class="card-text">This canvasser drove yesterday.</p>}
+                @if(Canvasser.DroveYesterday == true) { <p class="card-text text-dark">This canvasser drove yesterday.</p>}
 
-                @if(Canvasser.IsLeader == true) { <p class="card-text">This canvasser is a team leader.</p>}
+                @if(Canvasser.IsLeader == true) { <p class="card-text text-dark">This canvasser is a team leader.</p>}
 
-                @if(Canvasser.IsTraining == true) { <p class="card-text">This canvasser is still in training.</p>}
+                @if(Canvasser.IsTraining == true) { <p class="card-text text-dark">This canvasser is still in training.</p>}
+
+                @if(Canvasser.IsActive == true) { <p class="card-text text-dark">This canvasser is inactive.</p>}
 
                @*@if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">Do not pair this canvasser with the following canvassers: @Canvasser.DoNotPair</p>}
 
                @if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">This canvasser works well with the following canvassers: @Canvasser.DoPair</p>}*@
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
-                <span class="text-left">Created: @Canvasser.DateCreated</span>
-                @if (Canvasser.DateModified != null) { <span class="text-right">Last Changed: @Canvasser.DateModified</span>}
+                <span class="text-left text-dark">Created: @Canvasser.DateCreated</span>
+                @if (Canvasser.DateModified != null) { <span class="text-right text-dark">Last Changed: @Canvasser.DateModified</span>}
             </div>
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
-                <a href=@($"/canvasser/edit/{CanvasserId}") class="btn btn-outline-primary">Edit</a>
-                <a href="#" class="btn btn-outline-dark">Mark as Absent</a> @* This section needs work*@
+                <a href=@($"/canvasser/edit/{CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                 <a href=@($"/canvasser/delete/{CanvasserId}") class="btn btn-outline-danger">Delete</a>
-                <a href=@($"/canvasser/team/{CanvasserId}") class="btn btn-outline-danger">Add to Team</a>
+                <hr />
+                <a href=@($"/canvasser/team/{CanvasserId}") class="btn btn-outline-success">Add to Team</a>
+                <a href=@($"/canvasser/car/{CanvasserId}") class="btn btn-outline-success">Add to Car</a>
+                <a href=@($"/canvasser/site/{CanvasserId}") class="btn btn-outline-success">Add to Site</a>
                 <hr />
                 <a href="/canvasser">Back to List of Canvassers</a>
             </div>

@@ -27,6 +27,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 DropDistance = model.DropDistance,
                 DropAddress = model.DropAddress,
                 DateCreated = DateTimeOffset.Now,
+                IsActive = true,
                 OwnerId = _userId
             };
             _ctx.Sites.Add(entity);
@@ -55,6 +56,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
+                IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -80,6 +82,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
+                IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -113,6 +116,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             entity.DropDistance = model.DropDistance;   
             entity.DropAddress = model.DropAddress;
             entity.DateModified = DateTimeOffset.Now;
+            entity.IsActive = model.IsActive;
             
             return await _ctx.SaveChangesAsync() == 1;
         }

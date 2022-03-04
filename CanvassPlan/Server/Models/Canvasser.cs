@@ -18,6 +18,7 @@ namespace CanvassPlan.Server.Models
         public bool IsLeader { get; set; }
         public bool IsTraining { get; set; }
         public bool IsAbsent { get; set; }
+        public bool IsActive { get; set; }
         public bool DroveYesterday { get; set; }
         public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
         public virtual ICollection<Car> Cars { get; set; } = new List<Car>();

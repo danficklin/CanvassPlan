@@ -12,8 +12,9 @@ namespace CanvassPlan.Server.Services.CanvasserServices
         Task<CanvasserDetail> GetCanvasserByNameAsync(string name);
         Task<bool> UpdateCanvasserAsync(CanvasserEdit model);
         Task<bool> DeleteCanvasserAsync(int canvasserId);
-        Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCarAsDriver model);
+        Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCar model);
         Task<bool> AddCanvasserToTeamAsync(int canvasserId, CanvasserAddToTeam model);
+        Task<bool> AddCanvasserToSiteAsync(int canvasserId, CanvasserAddToSite model);
         void SetUserId(string userId);
 
     }

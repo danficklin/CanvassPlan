@@ -10,7 +10,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -25,9 +25,9 @@ else
                     <td>@canvasser.CanvasserId</td>
                     <td>@canvasser.Name</td>
                     <td>
-                        <a href=@($"canvasser/{canvasser.CanvasserId}")>Details    |</a>
-                        <a href=@($"canvasser/edit/{canvasser.CanvasserId}")>Edit    |</a>
-                        <a href=@($"canvasser/delete/{canvasser.CanvasserId}")>Delete</a>
+                        <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                        <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
+                        <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
                     </td>
                 </tr>
                 

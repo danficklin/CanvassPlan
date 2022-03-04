@@ -1,0 +1,30 @@
+﻿@page "/clear"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (Message != null)
+{
+    <h2 class="text-danger">@Message</h2>
+}
+<h3>Delete All Teams</h3>
+
+
+    <div class="container">
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Confirm Delete</a>
+            </div>
+        </div>
+    </div>
+
+
+@code {
+    public string Message { get; set; }
+    private async void HandleClick()
+    {
+        var clearRes = await http.PutAsJsonAsync<Clear>;
+        if(clearRes.IsSuccessStatusCode) { navigation.NavigateTo("/"); } 
+        else { Message = "Failed to clear teams. Please try again."; }
+    }
+}

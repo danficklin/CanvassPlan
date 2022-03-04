@@ -12,7 +12,9 @@ namespace CanvassPlan.Server.Services.TeamServices
         Task<TeamDetail> GetTeamByNameAsync(string name);
         Task<bool> UpdateTeamAsync(TeamEdit model);
         Task<bool> DeleteTeamAsync(int teamId);
+        Task<bool> DeleteAllTeamsAsync();
         void SetUserId(string userId);
+        Task<bool> ClearTeamsAsync();
         //Task<bool> GenerateTeamAsync(TeamGenerate model);
 
     }
