@@ -1,0 +1,50 @@
+﻿@page "/car/inactive"
+@attribute [Authorize]
+@inject HttpClient http
+
+<h3 class="text-danger">Inactive Cars</h3>
+<a class="text-success" href="/car/create">Add a Car   |</a>
+<a href="/car/">View Active cars   |</a>
+<a class="text-info" href="/car/all">View All cars</a>
+<hr />
+@if (_cars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table text-white">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in _cars)
+            {
+                @if (car.IsActive == true)
+                {
+                    <tr>
+                        <td>@car.CarId</td>
+                        <td>@car.Name</td>
+                        <td>
+                            <a href=@($"car/{car.CarId}") class="btn btn-outline-info">Details</a>
+                            <a href=@($"car/edit/{car.CarId}") class="btn btn-outline-secondary">Edit</a>
+                            <a href=@($"car/delete/{car.CarId}") class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CarListItem> _cars;
+    protected override async Task OnInitializedAsync()
+    {
+        _cars = await http.GetFromJsonAsync<List<CarListItem>>("api/car"); 
+    }
+}

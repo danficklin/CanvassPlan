@@ -9,25 +9,27 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span>Name: @Team.Name</span>
-                <span class="text-muted"><strong>@Team.TeamId</strong></span>
+                <span text-dark>Name: @Team.Name</span>
+                <span class="text-muted text-dark"><strong>@Team.TeamId</strong></span>
             </div>
-            <div class="card-body">
+            <div class="card-body text-dark">
                 @if(Team.Cars?.LastOrDefault() != default) {
-                <h4 class="card-title">Team: @Team.Cars.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text"> No car currently assigned.</p> }
+                <h4 class="card-title text-dark">Assigned Car: @Team.Cars.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> No car currently assigned.</p> }
                 @if(canvassersCount > 0)
                 {
-                    <h4>Canvassers</h4> 
+                    <h4 class="text-dark">Canvassers</h4> 
                     @foreach(CanvasserListItem c in Team.Canvassers)
                     {
-                        <h4>@c.Name</h4>
+                        <h4 class="text-dark">@c.Name</h4>
                     }
-                } else { <p class="card-text">No canvassers currently assigned.</p> }
+                } else { <p class="card-text text-dark">No canvassers currently assigned.</p> }
+                @if (Team.IsActive == true) { <h4 class="card-title text-dark">This team is inactive. </h4> }
+                @if (Team.Notes != null) { <h4 class="card-title text-dark">Notes: @Team.Notes </h4> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
-                <span class="text-left">Created: @Team.DateCreated</span>
-                @if (Team.DateModified != null) { <span class="text-right">Last Changed: @Team.DateModified</span>}
+                <span class="text-left text-dark">Created: @Team.DateCreated</span>
+                @if (Team.DateModified != null) { <span class="text-right text-dark">Last Changed: @Team.DateModified</span>}
             </div>
         </div>
         <div class="d-flex justify-content-center mt-3">

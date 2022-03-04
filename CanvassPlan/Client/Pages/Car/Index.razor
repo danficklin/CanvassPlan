@@ -2,15 +2,18 @@
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3>Cars</h3>
-<a href="/car/create">Add a car</a>
+<h3 class="text-primary">Active Cars</h3>
+<a class="text-success" href="/car/create">Add a Car   |</a>
+<a class="text-danger" href="/car/inactive">View Inactive Cars   |</a>
+<a class="text-info" href="/car/all">View All Cars</a>
+<hr />
 @if (_cars == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,16 +24,18 @@ else
         <tbody>
             @foreach (var car in _cars)
             {
-                <tr>
-                    <td>@car.CarId</td>
-                    <td>@car.Name</td>
-                    <td>
-                        <a href=@($"car/{car.CarId}")>Details    |</a>
-                        <a href=@($"car/edit/{car.CarId}")>Edit    |</a>
-                        <a href=@($"car/delete/{car.CarId}")>Delete</a>
-                    </td>
-                </tr>
-                
+                @if (car.IsActive == false)
+                {
+                    <tr>
+                        <td>@car.CarId</td>
+                        <td>@car.Name</td>
+                        <td>
+                            <a href=@($"car/{car.CarId}") class="btn btn-outline-info">Details</a>
+                            <a href=@($"car/edit/{car.CarId}") class="btn btn-outline-secondary">Edit</a>
+                            <a href=@($"car/delete/{car.CarId}") class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

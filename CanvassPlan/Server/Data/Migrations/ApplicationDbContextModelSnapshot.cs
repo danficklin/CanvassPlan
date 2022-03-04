@@ -106,6 +106,9 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<bool>("IsAbsent")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDriver")
                         .HasColumnType("bit");
 
@@ -119,7 +122,11 @@ namespace CanvassPlan.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -143,6 +150,9 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<DateTimeOffset?>("DateModified")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Make")
                         .HasColumnType("nvarchar(max)");
 
@@ -153,7 +163,11 @@ namespace CanvassPlan.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Seatbelts")
@@ -193,11 +207,18 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<double>("DropDistance")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SiteId");
@@ -218,8 +239,14 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<DateTimeOffset?>("DateModified")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
@@ -251,12 +278,12 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<int>("CarsCarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DriversCanvasserId")
+                    b.Property<int>("RidersCanvasserId")
                         .HasColumnType("int");
 
-                    b.HasKey("CarsCarId", "DriversCanvasserId");
+                    b.HasKey("CarsCarId", "RidersCanvasserId");
 
-                    b.HasIndex("DriversCanvasserId");
+                    b.HasIndex("RidersCanvasserId");
 
                     b.ToTable("CanvasserCar");
                 });
@@ -569,7 +596,7 @@ namespace CanvassPlan.Server.Data.Migrations
 
                     b.HasOne("CanvassPlan.Server.Models.Canvasser", null)
                         .WithMany()
-                        .HasForeignKey("DriversCanvasserId")
+                        .HasForeignKey("RidersCanvasserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

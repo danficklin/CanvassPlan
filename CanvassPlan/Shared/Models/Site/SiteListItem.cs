@@ -10,5 +10,6 @@ namespace CanvassPlan.Shared.Models.Site
     {
         public int SiteId { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; }
     }
 }

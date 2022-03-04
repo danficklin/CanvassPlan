@@ -25,9 +25,16 @@
             <InputCheckbox class="form-control" @bind-Value="model.IsDriver" />
             <label>Team leader?</label>
             <InputCheckbox class="form-control" @bind-Value="model.IsLeader" />
+            <label>Notes</label>
+            <InputText class="form-control" @bind-Value="model.Notes" />
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>
     </EditForm> 
+    <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-25">
+                <a href="/canvasser">Back to List of Canvassers</a>
+            </div>
+        </div>
 </div>
 
 @code{

@@ -25,10 +25,12 @@ namespace CanvassPlan.Server.Services.CarServices
             var carEntity = new Car
             {
                 Name = model.Name,
+                Notes = model.Notes,
                 Seatbelts = model.Seatbelts,
                 Make = model.Make,
                 Model = model.Model,
                 Year = model.Year,
+                IsActive = false,
                 DateCreated = DateTimeOffset.Now,
                 OwnerId = _userId
             };
@@ -47,7 +49,7 @@ namespace CanvassPlan.Server.Services.CarServices
         public async Task<CarDetail> GetCarByIdAsync(int carId)
         {
             var entity = await _ctx.Cars
-                .Include(c => c.Drivers)
+                .Include(c => c.Riders)
                 .Include(t => t.Teams)
                 .FirstOrDefaultAsync(c => c.CarId == carId && c.OwnerId == _userId);
             if (entity is null) return null;
@@ -55,11 +57,13 @@ namespace CanvassPlan.Server.Services.CarServices
             {
                 CarId = carId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 Seatbelts = entity.Seatbelts,
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                Drivers = entity.Drivers.Select(t => new CanvasserListItem
+                IsActive = entity.IsActive,
+                Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
                     Name = t.Name
@@ -87,11 +91,13 @@ namespace CanvassPlan.Server.Services.CarServices
             {
                 CarId = entity.CarId,
                 Name = name,
+                Notes = entity.Notes,
                 Seatbelts = entity.Seatbelts,
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                Drivers = entity.Drivers.Select(t => new CanvasserListItem
+                IsActive = entity.IsActive,
+                Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
                     Name = t.Name
@@ -114,6 +120,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 {
                     CarId = c.CarId,
                     Name = c.Name,
+                    IsActive = c.IsActive,
                 });
             return await carQuery.ToListAsync();
 
@@ -125,13 +132,32 @@ namespace CanvassPlan.Server.Services.CarServices
             var entity = await _ctx.Cars.FindAsync(model.CarId);
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Notes = model.Notes;
             entity.Seatbelts = model.Seatbelts;
             entity.Make = model.Make;
             entity.Model = model.Model;
             entity.Year = model.Year;
+            entity.IsActive = model.IsActive;
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> AddCarToTeamAsync(int carId, CarAddToTeam model)
+        {
+            var car = await _ctx.Cars.FindAsync(model.CarId);
+            var team = await _ctx.Teams
+                .Include(c => c.Cars)
+                .Where(c => c.OwnerId == _userId)
+                .FirstOrDefaultAsync(t => t.TeamId == model.TeamId);
+            if (model.CarId == carId)
+            {
+                team.Cars.Add(car);
+                var numberOfChanges = await _ctx.SaveChangesAsync();
+                return numberOfChanges == 1;
+                
+            }
+            return false;
         }
     }
 }

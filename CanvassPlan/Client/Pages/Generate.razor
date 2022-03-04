@@ -1,0 +1,36 @@
+﻿@page "/generate"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<h3>Generate Team</h3>
+
+@if (Message != null)
+{
+    <h2 class="text-danger">@Message</h2>
+}
+@if (Team != null)
+{
+    <div class="container">
+        <div class="sited">
+            <div class="sited-header d-flex justify-content-between">
+                <span>@Team.Name</span>
+                <span class="text-muted"><strong>ID: @Team.TeamId</strong></span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <a href=@($"/team/{TeamId}") class="btn btn-outline-primary">View Details</a>
+                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Team</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    
+}

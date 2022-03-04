@@ -2,15 +2,18 @@
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3>Site</h3>
-<a href="/site/create">Add a site</a>
+<h3 class="text-primary" >Active Sites</h3>
+<a class="text-success" href="/site/create">Add a Site   |</a>
+<a class="text-danger" href="/site/inactive">View Inactive Sites   |</a>
+<a class="text-info" href="/site/all">View All Sites</a>
+<hr />
 @if (_sites == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -20,17 +23,19 @@ else
         </thead>
         <tbody>
             @foreach (var site in _sites)
-            {
-                <tr>
-                    <td>@site.SiteId</td>
-                    <td>@site.Name</td>
-                    <td>
-                        <a href=@($"site/{site.SiteId}")>Details    |</a>
-                        <a href=@($"site/edit/{site.SiteId}")>Edit    |</a>
-                        <a href=@($"site/delete/{site.SiteId}")>Delete</a>
-                    </td>
-                </tr>
-                
+            @if (site.IsActive == false)
+                    {
+                        {
+                            <tr>
+                                <td>@site.SiteId</td>
+                        <td>@site.Name</td>
+                        <td>
+                            <a href=@($"site/{site.SiteId}") class="btn btn-outline-info">Details</a>
+                            <a href=@($"site/edit/{site.SiteId}") class="btn btn-outline-secondary">Edit</a>
+                            <a href=@($"site/delete/{site.SiteId}") class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

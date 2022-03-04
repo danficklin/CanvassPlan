@@ -1,0 +1,43 @@
+﻿@page "/canvasser/site/{CanvasserId:int}"
+@attribute [Authorize]
+@inject HttpClient http
+@inject NavigationManager navigation
+
+
+<h3>Add to Site</h3>
+
+
+@if (ErrorMessage != null)
+{
+    <h5 class="text-danger">@ErrorMessage</h5>
+}
+
+<div class="container">
+    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Which site ID?</label>
+            <InputNumber class="form-control" @bind-Value="model.SiteId" />
+            
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm> 
+</div>
+
+@code {
+    [Parameter]
+    public int CanvasserId { get; set; }
+    private CanvasserAddToSite model = new CanvasserAddToSite();
+    private string ErrorMessage { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        model = await http.GetFromJsonAsync<CanvasserAddToSite>($"/api/canvasser/{CanvasserId}");
+    }
+    private async void HandleSubmit()
+    {
+        var editRes = await http.PutAsJsonAsync<CanvasserAddToSite>($"/api/canvasser/site/{CanvasserId}", model);
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/site/{model.SiteId}"); }
+        else { ErrorMessage = "Could add this canvasser to the site. Please try again."; }
+    }
+}

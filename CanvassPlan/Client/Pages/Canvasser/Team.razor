@@ -29,7 +29,7 @@
     [Parameter]
     public int CanvasserId { get; set; }
     private CanvasserAddToTeam model = new CanvasserAddToTeam();
-    private string ErrorMessage { get;  set; }
+    private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
         model = await http.GetFromJsonAsync<CanvasserAddToTeam>($"/api/canvasser/{CanvasserId}");
@@ -37,7 +37,7 @@
     private async void HandleSubmit()
     {
         var editRes = await http.PutAsJsonAsync<CanvasserAddToTeam>($"/api/canvasser/team/{CanvasserId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{CanvasserId}"); }
-        else { ErrorMessage = "Could not edit this canvasser. Please try again."; }
+        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{model.TeamId}"); }
+        else { ErrorMessage = "Could add this canvasser to the team. Please try again."; }
     }
 }

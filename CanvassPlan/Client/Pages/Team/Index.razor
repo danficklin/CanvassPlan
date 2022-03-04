@@ -2,15 +2,19 @@
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3>Teams</h3>
-<a href="/team/create">Add a team</a>
+<h3 class="text-primary">Active Teams</h3>
+<a class="text-success" href="/team/create">Add a Team   |</a>
+<a class="text-danger" href="/team/inactive">View Inactive Teams   |</a>
+<a class="text-info" href="/team/all">View All Teams   |</a>
+<a class="text-muted" href="/team/manipulate">Manipulate Teams</a>
+<hr />
 @if (_teams == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,16 +25,18 @@ else
         <tbody>
             @foreach (var team in _teams)
             {
-                <tr>
-                    <td>@team.TeamId</td>
-                    <td>@team.Name</td>
-                    <td>
-                        <a href=@($"team/{team.TeamId}")>Details    |</a>
-                        <a href=@($"team/edit/{team.TeamId}")>Edit    |</a>
-                        <a href=@($"team/delete/{team.TeamId}")>Delete</a>
-                    </td>
-                </tr>
-                
+                @if (team.IsActive == false)
+                {
+                    <tr>
+                        <td>@team.TeamId</td>
+                        <td>@team.Name</td>
+                        <td>
+                            <a href=@($"team/{team.TeamId}") class="btn btn-outline-info">Details</a>
+                            <a href=@($"team/edit/{team.TeamId}") class="btn btn-outline-secondary">Edit</a>
+                            <a href=@($"team/delete/{team.TeamId}") class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

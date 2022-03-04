@@ -9,10 +9,12 @@ namespace CanvassPlan.Shared.Models.Site
     {
         public int SiteId { get; set; }
         public string Name { get; set; }
+        public string Notes { get; set; }
         public string Area { get; set; }    
         public int Drop { get; set; }
         public double DropDistance { get; set; }
         public string DropAddress { get; set; }
+        public bool IsActive { get; set; }
         public ICollection<CanvasserListItem> Canvassers { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }

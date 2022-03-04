@@ -10,8 +10,10 @@ namespace CanvassPlan.Server.Models
         public int TeamId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Notes { get; set; }
         [Required]
         public string OwnerId { get; set; }
+        public bool IsActive { get; set; }
         public ICollection<Canvasser> Canvassers { get; set; } = new List<Canvasser>();   
         public ICollection<Car> Cars { get; set; } = new List<Car>();
         public DateTimeOffset DateCreated { get; set; }

@@ -2,11 +2,11 @@
 
 namespace CanvassPlan.Shared.Models.Canvasser
 {
-    public class CanvasserAddToCarAsDriver
+    public class CanvasserAddToSite
     {
         [Required]
         public int CanvasserId { get; set; }
         [Required]
-        public int CarId { get; set; }    
+        public int SiteId { get; set; }    
     }
 }

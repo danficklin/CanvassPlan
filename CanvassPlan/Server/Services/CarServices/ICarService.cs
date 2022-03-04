@@ -13,5 +13,6 @@ namespace CanvassPlan.Server.Services.CarServices
         Task<bool> UpdateCarAsync(CarEdit model);
         Task<bool> DeleteCarAsync(int carId);
         void SetUserId(string userId);
+        Task<bool> AddCarToTeamAsync(int carId, CarAddToTeam model);
     }
 }

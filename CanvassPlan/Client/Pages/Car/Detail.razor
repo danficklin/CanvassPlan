@@ -9,24 +9,43 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span>Name: @Car.Name</span>
-                <span class="text-muted"><strong>@Car.CarId</strong></span>
+                <span class="text-dark">Name: @Car.Name</span>
+                <span class="text-muted text-dark"><strong>@Car.CarId</strong></span>
             </div>
             <div class="card-body">
-                @if (Car.Seatbelts != 0) { <h4 class="card-title">Seatbelts: @Car.Seatbelts </h4> }
-                @if (Car.Make != null) { <h4 class="card-title">Make: @Car.Make </h4> }
-                @if (Car.Model != null) { <h4 class="card-title">Model: @Car.Model </h4> }
-                @if (Car.Year != 0) { <h4 class="card-title">Year: @Car.Year </h4> }                
+                @if (Car.Seatbelts != 0) { <h4 class="card-title text-dark">Seatbelts: @Car.Seatbelts </h4> }
+                @if (Car.Make != null) { <h4 class="card-title text-dark">Make: @Car.Make </h4> }
+                @if (Car.Model != null) { <h4 class="card-title text-dark">Model: @Car.Model </h4> }
+                @if (Car.Year != 0) { <h4 class="card-title text-dark">Year: @Car.Year </h4> } 
+                @if (Car.IsActive == true) { <p class="card-text text-danger">This car is inactive. </p> }
+                else { <p class="card-text text-dark">This car is active.</p> }
+                @if(Car.Riders?.LastOrDefault() != default) {
+                <h4 class="card-title text-dark">Assigned Canvasser: @Car.Riders.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> No canvassers currently assigned.</p> }
+                @if(Car.Teams?.LastOrDefault() != default) {
+                <h4 class="card-title text-dark">This car is assigned to Team # @Car.Teams.LastOrDefault()?.TeamId</h4>
+                } else { <p class="card-text text-dark"> This car is not currently assigned to a team.</p> }
+                @if(ridersCount > 0)
+                {
+                    <h4 class="text-dark">Past Canvassers</h4> 
+                    @foreach(CanvasserListItem c in Car.Riders)
+                    {
+                        <h4>@c.Name</h4>
+                    }
+                } else { <p class="card-text text-dark">No canvassers have been assigned to this vehicle.</p> }
+                @if (Car.Notes != null) { <h4 class="card-title text-dark">Notes: @Car.Notes </h4> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
-                <span class="text-left">Created: @Car.DateCreated</span>
-                @if (Car.DateModified != null) { <span class="text-right">Last Changed: @Car.DateModified</span>}
+                <span class="text-left text-dark">Created: @Car.DateCreated</span>
+                @if (Car.DateModified != null) { <span class="text-right text-dark">Last Changed: @Car.DateModified</span>}
             </div>
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
-                <a href=@($"/car/edit/{CarId}") class="btn btn-outline-primary">Edit</a>
+                <a href=@($"/car/edit/{CarId}") class="btn btn-outline-secondary">Edit</a>
                 <a href=@($"/car/delete/{CarId}") class="btn btn-outline-danger">Delete</a>
+                <hr />
+                <a href=@($"/car/team/{CarId}") class="btn btn-outline-success">Add to Team</a>
                 <hr />
                 <a href="/car">Back to List of Cars</a>
             </div>
@@ -42,8 +61,10 @@ else
     [Parameter]
     public int CarId { get; set; }
     private CarDetail Car = new CarDetail();
+    int ridersCount;
     protected override async Task OnInitializedAsync()
     {
         Car = await http.GetFromJsonAsync<CarDetail>($"api/car/{CarId}");
+        ridersCount = Car.Riders.Count;
     }
 }
