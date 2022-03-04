@@ -14,7 +14,7 @@
             </div>
             <div class="card-body text-dark">
                 @if(Team.Cars?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Team: @Team.Cars.LastOrDefault()?.Name</h4>
+                <h4 class="card-title text-dark">Assigned Car: @Team.Cars.LastOrDefault()?.Name</h4>
                 } else { <p class="card-text text-dark"> No car currently assigned.</p> }
                 @if(canvassersCount > 0)
                 {

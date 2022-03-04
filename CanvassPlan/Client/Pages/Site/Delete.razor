@@ -12,16 +12,27 @@
 @if (Site != null)
 {
     <div class="container">
-        <div class="sited">
-            <div class="sited-header d-flex justify-content-between">
-                <span>@Site.Name</span>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span class="text-dark">@Site.Name</span>
                 <span class="text-muted"><strong>ID: @Site.SiteId</strong></span>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title text-dark">Area: @Site.Area </h4>
+                @if (Site.Drop != 0) { <h4 class="card-title text-dark">Drop Order: @Site.Drop </h4> }
+                @if (Site.DropDistance != 0) { <h4 class="card-title text-dark">Distance from Office: @Site.DropDistance miles </h4> }
+                @if (Site.DropAddress != null) { <h4 class="card-title text-dark">Address: @Site.DropAddress </h4> }  
+                @if (Site.IsActive == false) { <h4 class="card-title text-dark">This site is inactive. </h4> }
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between">
+                <span class="text-left text-dark">Created: @Site.DateCreated</span>
+                @if (Site.DateModified != null) { <span class="text-right text-dark">Last Changed: @Site.DateModified</span>}
             </div>
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <a href=@($"/site/{SiteId}") class="btn btn-outline-primary">View Details</a>
-                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Site</a>
+                <a href=@($"/site/{SiteId}") class="btn btn-outline-primary">Back to Details</a>
+                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Confirm Delete</a>
             </div>
         </div>
     </div>

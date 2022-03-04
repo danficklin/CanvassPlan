@@ -20,12 +20,9 @@
                 @if (Site.IsActive == false) { <h4 class="card-title text-dark">This site is inactive. </h4> }
             </div>
             <div class="card-body">
-                @if(Site.Canvassers?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Assigned Canvasser: @Site.Canvassers.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text text-dark"> No canvasser currently assigned.</p> }
                 @if(canvassersCount > 0)
                 {
-                    <h4 class="text-dark">Past Canvassers</h4> 
+                    <h4 class="text-dark">Canvassers</h4> 
                     @foreach(CanvasserListItem c in Site.Canvassers)
                     {
                         <h4>@c.Name</h4>
