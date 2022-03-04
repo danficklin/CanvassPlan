@@ -6,6 +6,7 @@ namespace CanvassPlan.Shared.Models.Canvasser
     {
         [Required]
         public string Name { get; set; }
+        public string Notes { get; set; }
         [Required]
         public string Phone { get; set; }
         public string AltPhone { get; set; }

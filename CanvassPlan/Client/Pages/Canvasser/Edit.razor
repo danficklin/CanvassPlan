@@ -32,6 +32,9 @@
             <label>Is absent?<InputCheckbox class="form-control" @bind-Value="Model.IsAbsent" /></label>
             <hr />
             <label>Is inactive?<InputCheckbox class="form-control" @bind-Value="Model.IsActive" /></label>
+            <hr />
+            <label>Notes</label>
+            <InputText class="form-control" @bind-Value="Model.Notes" />
             
             <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
         </div>

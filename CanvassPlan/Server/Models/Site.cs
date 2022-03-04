@@ -10,6 +10,8 @@ namespace CanvassPlan.Server.Models
         public int SiteId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Notes { get; set; }
+        [Required]
         public string OwnerId { get; set; }
         [Required]
         public string Area { get; set; }

@@ -23,6 +23,7 @@
                 @if (Site.DropDistance != 0) { <h4 class="card-title text-dark">Distance from Office: @Site.DropDistance miles </h4> }
                 @if (Site.DropAddress != null) { <h4 class="card-title text-dark">Address: @Site.DropAddress </h4> }  
                 @if (Site.IsActive == false) { <h4 class="card-title text-dark">This site is inactive. </h4> }
+                @if (Site.Notes != null) { <h4 class="card-title text-dark">Notes: @Site.Notes </h4> } 
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left text-dark">Created: @Site.DateCreated</span>

@@ -1,0 +1,48 @@
+﻿@page "/site/all"
+@attribute [Authorize]
+@inject HttpClient http
+
+<h3 class="text-info">All Sites</h3>
+<a class="text-success" href="/site/create">Add a Site   |</a>
+<a class="text-danger" href="/site/inactive">View Inactive Sites   |</a>
+<a href="/site/all">View Active Sites</a>
+<hr />
+@if (_sites == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table text-white">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var site in _sites)
+            {
+                <tr>
+                    <td>@site.SiteId</td>
+                    <td>@site.Name</td>
+                    <td>
+                        <a href=@($"site/{site.SiteId}") class="btn btn-outline-info">Details</a>
+                        <a href=@($"site/edit/{site.SiteId}") class="btn btn-outline-secondary">Edit</a>
+                        <a href=@($"site/delete/{site.SiteId}") class="btn btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<SiteListItem> _sites;
+    protected override async Task OnInitializedAsync()
+    {
+        _sites = await http.GetFromJsonAsync<List<SiteListItem>>("api/site"); 
+    }
+}

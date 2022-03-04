@@ -1,12 +1,11 @@
-﻿@page "/team"
+﻿@page "/team/inactive"
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3 class="text-primary">Active Teams</h3>
-<a class="text-success" href="/team/create">Add a Team   |</a>
-<a class="text-danger" href="/team/inactive">View Inactive Teams   |</a>
-<a class="text-info" href="/team/all">View All Teams   |</a>
-<a class="text-muted" href="/team/manipulate">Manipulate Teams</a>
+<h3 class="text-danger">Inactive Teams</h3>
+<a class="text-success" href="/team/create">Add a team   |</a>
+<a href="/team/">View Active Teams   |</a>
+<a class="text-info" href="/team/all">View All Teams</a>
 <hr />
 @if (_teams == null)
 {
@@ -25,7 +24,7 @@ else
         <tbody>
             @foreach (var team in _teams)
             {
-                @if (team.IsActive == false)
+                @if (team.IsActive == true)
                 {
                     <tr>
                         <td>@team.TeamId</td>

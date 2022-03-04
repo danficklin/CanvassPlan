@@ -23,11 +23,12 @@ namespace CanvassPlan.Server.Services.SiteServices
             var entity = new Site
             {
                 Name = model.Name,
+                Notes = model.Notes,
                 Area = model.Area,
                 DropDistance = model.DropDistance,
                 DropAddress = model.DropAddress,
                 DateCreated = DateTimeOffset.Now,
-                IsActive = true,
+                IsActive = false,
                 OwnerId = _userId
             };
             _ctx.Sites.Add(entity);
@@ -52,6 +53,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             {
                 SiteId = siteId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 Area = entity.Area,
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
@@ -78,6 +80,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             {
                 SiteId = entity.SiteId,
                 Name = name,
+                Notes = entity.Notes,
                 Area = entity.Area,
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
@@ -102,6 +105,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 {
                     SiteId = s.SiteId,
                     Name = s.Name,
+                    IsActive = s.IsActive,
                 });
             return await query.ToListAsync();
         }
@@ -112,6 +116,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             var entity = await _ctx.Sites.FindAsync(model.SiteId);  
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Notes = model.Notes;
             entity.Area = model.Area;
             entity.DropDistance = model.DropDistance;   
             entity.DropAddress = model.DropAddress;

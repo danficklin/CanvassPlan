@@ -10,6 +10,7 @@ namespace CanvassPlan.Server.Models
         public int TeamId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Notes { get; set; }
         [Required]
         public string OwnerId { get; set; }
         public bool IsActive { get; set; }

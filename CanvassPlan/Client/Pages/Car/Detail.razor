@@ -33,6 +33,7 @@
                         <h4>@c.Name</h4>
                     }
                 } else { <p class="card-text text-dark">No canvassers have been assigned to this vehicle.</p> }
+                @if (Car.Notes != null) { <h4 class="card-title text-dark">Notes: @Car.Notes </h4> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left text-dark">Created: @Car.DateCreated</span>

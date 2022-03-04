@@ -7,6 +7,7 @@ namespace CanvassPlan.Shared.Models.Canvasser
         [Required]
         public int CanvasserId { get; set; }
         public string Name { get; set; }
+        public string Notes { get; set; }
         public string Phone { get; set; }
         public string AltPhone { get; set; }
         public bool IsDriver { get; set; }

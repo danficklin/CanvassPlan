@@ -1,9 +1,45 @@
-﻿@page "/canvasser"
+﻿@page "/canvasser/"
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3>Canvassers</h3>
-<a href="/canvasser/create">Add a canvasser</a>
+<h3 class="text-primary" >Active Canvassers</h3>
+<a class="text-success" href="/canvasser/create">Add a Canvasser   |</a>
+<a class="text-danger" href="/canvasser/inactive">View Inactive Canvassers   |</a>
+<a class="text-info" href="/canvasser/all">View All Canvassers</a>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="hideAbsent">
+            <label class="form-check-label" for="hideAbsent">Hide Absent</label>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="showOnlyDrivers">
+            <label class="form-check-label" for="showOnlyDrivers">Hide Non-Drivers</label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="showOnlyLeaders">
+            <label class="form-check-label" for="showOnlyLeaders">Hide Non-Leaders</label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="showOnlyTrainees">
+            <label class="form-check-label" for="showOnlyTrainees">Hide Non-Trainees</label>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+
 @if (_canvassers == null)
 {
     <p><em>Loading...</em></p>
@@ -21,16 +57,21 @@ else
         <tbody>
             @foreach (var canvasser in _canvassers)
             {
-                <tr>
-                    <td>@canvasser.CanvasserId</td>
-                    <td>@canvasser.Name</td>
-                    <td>
-                        <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
-                        <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
-                        <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
-                    </td>
-                </tr>
-                
+                @*if (hideAbsent.Checked)
+                {*@
+                    @if (canvasser.IsActive == false)
+                    {
+                        <tr>
+                            <td>@canvasser.CanvasserId</td>
+                            <td>@canvasser.Name</td>
+                            <td>
+                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                                <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
+                                <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                   @*}*@
+                }
             }
         </tbody>
     </table>

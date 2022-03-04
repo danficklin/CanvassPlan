@@ -8,6 +8,7 @@ namespace CanvassPlan.Shared.Models.Site
         public int SiteId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Notes { get; set; }
         [Required]
         public string Area { get; set; }    
         public double DropDistance { get; set; }

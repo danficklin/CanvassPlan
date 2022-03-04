@@ -25,11 +25,12 @@ namespace CanvassPlan.Server.Services.CarServices
             var carEntity = new Car
             {
                 Name = model.Name,
+                Notes = model.Notes,
                 Seatbelts = model.Seatbelts,
                 Make = model.Make,
                 Model = model.Model,
                 Year = model.Year,
-                IsActive = true,
+                IsActive = false,
                 DateCreated = DateTimeOffset.Now,
                 OwnerId = _userId
             };
@@ -56,6 +57,7 @@ namespace CanvassPlan.Server.Services.CarServices
             {
                 CarId = carId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 Seatbelts = entity.Seatbelts,
                 Make = entity.Make,
                 Model = entity.Model,
@@ -89,6 +91,7 @@ namespace CanvassPlan.Server.Services.CarServices
             {
                 CarId = entity.CarId,
                 Name = name,
+                Notes = entity.Notes,
                 Seatbelts = entity.Seatbelts,
                 Make = entity.Make,
                 Model = entity.Model,
@@ -117,6 +120,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 {
                     CarId = c.CarId,
                     Name = c.Name,
+                    IsActive = c.IsActive,
                 });
             return await carQuery.ToListAsync();
 
@@ -128,6 +132,7 @@ namespace CanvassPlan.Server.Services.CarServices
             var entity = await _ctx.Cars.FindAsync(model.CarId);
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Notes = model.Notes;
             entity.Seatbelts = model.Seatbelts;
             entity.Make = model.Make;
             entity.Model = model.Model;

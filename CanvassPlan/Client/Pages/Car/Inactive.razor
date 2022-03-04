@@ -1,11 +1,11 @@
-﻿@page "/car"
+﻿@page "/car/inactive"
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3 class="text-primary">Active Cars</h3>
+<h3 class="text-danger">Inactive Cars</h3>
 <a class="text-success" href="/car/create">Add a Car   |</a>
-<a class="text-danger" href="/car/inactive">View Inactive Cars   |</a>
-<a class="text-info" href="/car/all">View All Cars</a>
+<a href="/car/">View Active cars   |</a>
+<a class="text-info" href="/car/all">View All cars</a>
 <hr />
 @if (_cars == null)
 {
@@ -24,7 +24,7 @@ else
         <tbody>
             @foreach (var car in _cars)
             {
-                @if (car.IsActive == false)
+                @if (car.IsActive == true)
                 {
                     <tr>
                         <td>@car.CarId</td>

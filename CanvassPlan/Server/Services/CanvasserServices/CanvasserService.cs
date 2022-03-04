@@ -25,12 +25,13 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             var entity = new Canvasser
             {
                 Name = model.Name,
+                Notes = model.Notes,
                 Phone = model.Phone,
                 AltPhone = model.AltPhone,
                 IsDriver = model.IsDriver,
                 IsLeader = model.IsLeader,
                 IsTraining = model.IsTraining,
-                IsActive = true,
+                IsActive = false,
                 OwnerId = _userId,
                 DateCreated = DateTimeOffset.Now,
             };
@@ -59,6 +60,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             {
                 CanvasserId = canvasserId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 Phone = entity.Phone,
                 AltPhone = entity.AltPhone,
                 IsDriver = entity.IsDriver,
@@ -110,6 +112,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             {
                 CanvasserId = entity.CanvasserId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 Phone = entity.Phone,
                 AltPhone = entity.AltPhone,
                 IsDriver = entity.IsDriver,
@@ -157,6 +160,8 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 {
                     CanvasserId = n.CanvasserId,
                     Name = n.Name,
+                    IsActive = n.IsActive,
+                    IsAbsent = n.IsAbsent, 
                 });
             return await query.ToListAsync();
         }
@@ -167,6 +172,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             var entity = await _ctx.Canvassers.FindAsync(model.CanvasserId);
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Notes = model.Notes;
             entity.Phone = model.Phone;
             entity.AltPhone = model.AltPhone;
             entity.IsDriver = model.IsDriver;

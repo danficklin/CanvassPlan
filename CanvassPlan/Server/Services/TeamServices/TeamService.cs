@@ -23,8 +23,9 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = new Team
             {
                 Name = model.Name,
+                Notes = model.Notes,
                 DateCreated = DateTimeOffset.Now,
-                IsActive = true,
+                IsActive = false,
                 OwnerId = _userId
             };
             _ctx.Teams.Add(entity);
@@ -58,6 +59,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             {
                 TeamId = teamId,
                 Name = entity.Name,
+                Notes = entity.Notes,
                 IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
@@ -86,6 +88,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             {
                 TeamId = entity.TeamId,
                 Name = name,
+                Notes = entity.Notes,
                 IsActive = entity.IsActive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
@@ -111,6 +114,7 @@ namespace CanvassPlan.Server.Services.TeamServices
                 {
                     TeamId = t.TeamId,
                     Name = t.Name,
+                    IsActive = t.IsActive,
                 });
             return await query.ToListAsync();
         }
@@ -121,6 +125,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = await _ctx.Teams.FindAsync(model.TeamId);
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
+            entity.Notes = model.Notes;
             entity.IsActive = model.IsActive;
             entity.DateModified = DateTimeOffset.Now;
             return await _ctx.SaveChangesAsync() == 1;

@@ -1,11 +1,11 @@
-﻿@page "/site"
+﻿@page "/site/inactive"
 @attribute [Authorize]
 @inject HttpClient http
 
-<h3 class="text-primary" >Active Sites</h3>
+<h3 class="text-danger" >Inactive Sites</h3>
 <a class="text-success" href="/site/create">Add a Site   |</a>
-<a class="text-danger" href="/site/inactive">View Inactive Sites   |</a>
-<a class="text-info" href="/site/all">View All Sites</a>
+<a href="/site/">View Active Sites   |</a>
+<a class="text-info" href="/site/all">View All Sites   |</a>
 <hr />
 @if (_sites == null)
 {
@@ -23,7 +23,7 @@ else
         </thead>
         <tbody>
             @foreach (var site in _sites)
-            @if (site.IsActive == false)
+            @if (site.IsActive == true)
                     {
                         {
                             <tr>

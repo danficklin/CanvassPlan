@@ -46,6 +46,9 @@
                @*@if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">Do not pair this canvasser with the following canvassers: @Canvasser.DoNotPair</p>}
 
                @if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">This canvasser works well with the following canvassers: @Canvasser.DoPair</p>}*@
+               @if (Canvasser.Notes != null) {
+                    <h4 class="card-title text-dark">Notes: @Canvasser.Notes </h4>
+                }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left text-dark">Created: @Canvasser.DateCreated</span>
