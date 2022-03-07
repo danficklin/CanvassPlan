@@ -125,5 +125,14 @@ namespace CanvassPlan.Server.Services.SiteServices
             
             return await _ctx.SaveChangesAsync() == 1;
         }
+        public async Task<bool> ToggleSiteActiveAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Sites.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsActive = !entity.IsActive;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
     }
 }

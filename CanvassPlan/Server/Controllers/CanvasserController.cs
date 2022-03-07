@@ -71,6 +71,27 @@ namespace CanvassPlan.Server.Controllers
             if (wasSuccessful) return Ok();
             return BadRequest();
         }
+
+        [HttpPut("absent/{id}")]
+        public async Task<IActionResult> ToggleAbsent(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _canvasserService.ToggleCanvasserAbsentAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
+        [HttpPut("active/{id}")]
+        public async Task<IActionResult> ToggleActive(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _canvasserService.ToggleCanvasserActiveAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

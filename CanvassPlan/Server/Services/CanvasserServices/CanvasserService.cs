@@ -31,6 +31,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 IsDriver = model.IsDriver,
                 IsLeader = model.IsLeader,
                 IsTraining = model.IsTraining,
+                IsAbsent = false,
                 IsActive = false,
                 OwnerId = _userId,
                 DateCreated = DateTimeOffset.Now,
@@ -162,6 +163,9 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                     Name = n.Name,
                     IsActive = n.IsActive,
                     IsAbsent = n.IsAbsent, 
+                    IsDriver = n.IsDriver,
+                    IsLeader = n.IsLeader,
+                    IsTraining = n.IsTraining,
                 });
             return await query.ToListAsync();
         }
@@ -181,6 +185,26 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             entity.IsAbsent = model.IsAbsent;
             entity.IsActive = model.IsActive;
             entity.DateModified = DateTimeOffset.Now;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> ToggleCanvasserAbsentAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Canvassers.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsAbsent = !entity.IsAbsent;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> ToggleCanvasserActiveAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Canvassers.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsActive = !entity.IsActive;
 
             return await _ctx.SaveChangesAsync() == 1;
         }

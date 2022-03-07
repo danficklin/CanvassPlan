@@ -31,7 +31,7 @@
                 <h4 class="card-title text-dark">Car: @Canvasser.Cars.LastOrDefault()?.Name</h4>
                 } else { <p class="card-text text-dark"> Not currently assigned to a car.</p>}
 
-                @if(Canvasser.IsAbsent == true) { <p class="card-text text-dark">This canvasser is absent.</p>}
+                @if(Canvasser.IsAbsent == true) { <p class="card-text text-secondary">This canvasser is absent.</p>}
 
                 @if(Canvasser.IsDriver == true) { <p class="card-text text-dark">This canvasser is qualified to drive.</p>}
                 
@@ -66,6 +66,7 @@
                 <hr />
                 <a href=@($"/canvasser/site/{CanvasserId}") class="btn btn-outline-primary">Add to Site</a>
                 <hr />
+
                 <a href="/canvasser">Back to List of Canvassers</a>
             </div>
         </div>

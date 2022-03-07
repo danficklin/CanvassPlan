@@ -6,5 +6,8 @@
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public bool IsAbsent { get; set; }  
+        public bool IsDriver { get; set; }
+        public bool IsLeader { get; set; }
+        public bool IsTraining { get; set; }
     }
 }
