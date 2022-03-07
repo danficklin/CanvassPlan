@@ -11,6 +11,7 @@ namespace CanvassPlan.Server.Services.CarServices
         Task<CarDetail> GetCarByIdAsync(int carId);
         Task<CarDetail> GetCarByNameAsync(string name);
         Task<bool> UpdateCarAsync(CarEdit model);
+        Task<bool> ToggleCarActiveAsync(int carId);
         Task<bool> DeleteCarAsync(int carId);
         void SetUserId(string userId);
         Task<bool> AddCarToTeamAsync(int carId, CarAddToTeam model);

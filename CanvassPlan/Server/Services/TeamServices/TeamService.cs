@@ -131,10 +131,23 @@ namespace CanvassPlan.Server.Services.TeamServices
             return await _ctx.SaveChangesAsync() == 1;
         }
 
+        public async Task<bool> ToggleTeamActiveAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Teams.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsActive = !entity.IsActive;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
         public async Task<bool> ClearTeamsAsync()
         {
             var entity = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
-            foreach (Team t in entity) { t.IsActive = false; }
+            foreach (Team t in entity) 
+            { 
+                t.IsActive = false; 
+            }
             return await _ctx.SaveChangesAsync() == 1;
         }
 

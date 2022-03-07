@@ -1,14 +1,10 @@
-﻿@page "/canvasser/"
+﻿@page "/canvasser/driver/inactive"
 @attribute [Authorize]
 @inject HttpClient http
-@inject NavigationManager navigation
 
-<h3 class="text-primary" >Active Canvassers</h3>
-<a class="text-success" href="/canvasser/create">Add a Canvasser   |</a>
-<a class="text-danger" href="/canvasser/inactive">View Inactive Canvassers   |</a>
-<a class="text-primary" href="/canvasser/driver">View Only Drivers   |</a>
-<a class="text-info" href="/canvasser/leader">View Only Leaders   |</a>
-<a class="text-secondary" href="/canvasser/trainee">View Only Trainees</a>
+<h3 class="text-primary" >Inactive Drivers</h3>
+<a class="text-primary" href="/canvasser/driver/all">View All Drivers   |</a>
+<a class="text-success" href="/canvasser/">View Active Canvassers</a>
 
 <hr />
 
@@ -43,7 +39,7 @@ else
             {
                 if (!hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == false)
+                    @if (canvasser.IsActive == true && canvasser.IsDriver == true)
                     {
                         <tr>
                             <td>@canvasser.CanvasserId</td>
@@ -51,17 +47,14 @@ else
                             <td>
                                 <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
                                 <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
-                                <a class="btn btn-outline-danger" @onclick="() => ToggleActive(canvasser)">Deactivate</a> 
-                                 @if (canvasser.IsAbsent == false) { <a class="btn btn-outline-primary" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a> }
-                                 else if (canvasser.IsAbsent == true) { <a class="btn btn-outline-primary" @onclick="() => ToggleAbsent(canvasser)">Mark as Present</a>}
-                                
+                                <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
                     }
                 }
                 else if (hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == false)
+                    @if (canvasser.IsActive == true && canvasser.IsDriver == true)
                     {
                         if (canvasser.IsAbsent == false)
                         {
@@ -72,8 +65,6 @@ else
                                     <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
                                     <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                                     <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
-                                    <a class="btn btn-outline-danger" @onclick="() => ToggleActive(canvasser)">Deactivate</a>
-                                    <a class="btn btn-outline-primary" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a>
                                 </td>
                             </tr>
                             }
@@ -86,7 +77,6 @@ else
 
 @code {
     private List<CanvasserListItem> _canvassers;
-    private string ErrorMessage { get;  set; }
     private bool hideAbsentChecked { get; set; } = false;
     protected override async Task OnInitializedAsync()
     {
@@ -96,19 +86,5 @@ else
     private async Task HideAbsent()
     {
         hideAbsentChecked = !hideAbsentChecked;
-    }
-    private async void ToggleAbsent(CanvasserListItem canvasser)
-    {
-        canvasser.IsAbsent = !canvasser.IsAbsent;
-        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/absent/{canvasser.CanvasserId}", new());
-        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/"); }
-        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
-    }
-    private async void ToggleActive(CanvasserListItem canvasser)
-    {
-        canvasser.IsActive = !canvasser.IsActive;
-        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/active/{canvasser.CanvasserId}", new());
-        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/"); }
-        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
 }

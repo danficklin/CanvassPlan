@@ -71,6 +71,17 @@ namespace CanvassPlan.Server.Controllers
             if (wasSuccessful) return Ok();
             return BadRequest();
         }
+
+        [HttpPut("active/{id}")]
+        public async Task<IActionResult> ToggleActive(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _teamService.ToggleTeamActiveAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
         [HttpPut("clear")]
         public async Task<IActionResult> Clear()
         {

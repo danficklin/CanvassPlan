@@ -143,6 +143,16 @@ namespace CanvassPlan.Server.Services.CarServices
             return await _ctx.SaveChangesAsync() == 1;
         }
 
+        public async Task<bool> ToggleCarActiveAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Cars.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsActive = !entity.IsActive;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
         public async Task<bool> AddCarToTeamAsync(int carId, CarAddToTeam model)
         {
             var car = await _ctx.Cars.FindAsync(model.CarId);

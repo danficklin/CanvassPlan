@@ -1,12 +1,13 @@
 ﻿@page "/team"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 <h3 class="text-primary">Active Teams</h3>
 <a class="text-success" href="/team/create">Add a Team   |</a>
 <a class="text-danger" href="/team/inactive">View Inactive Teams   |</a>
 <a class="text-info" href="/team/all">View All Teams   |</a>
-<a class="text-muted" href="/team/manipulate">Manipulate Teams</a>
+<a class="text-muted" href="/team/rearrange">Rearrange Teams</a>
 <hr />
 @if (_teams == null)
 {
@@ -33,7 +34,7 @@ else
                         <td>
                             <a href=@($"team/{team.TeamId}") class="btn btn-outline-info">Details</a>
                             <a href=@($"team/edit/{team.TeamId}") class="btn btn-outline-secondary">Edit</a>
-                            <a href=@($"team/delete/{team.TeamId}") class="btn btn-outline-danger">Delete</a>
+                            <a class="btn btn-outline-danger" @onclick="() => ToggleActive(team)">Deactivate</a>
                         </td>
                     </tr>
                 }
@@ -44,8 +45,17 @@ else
 
 @code {
     private List<TeamListItem> _teams;
+    private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
         _teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
+    }
+
+    private async void ToggleActive(TeamListItem team)
+    {
+        team.IsActive = !team.IsActive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/team/active/{team.TeamId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
 }
