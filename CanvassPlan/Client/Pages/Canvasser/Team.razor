@@ -25,9 +25,11 @@
     </EditForm> 
 </div>
 
+
 @code {
     [Parameter]
     public int CanvasserId { get; set; }
+    private List<TeamListItem> Teams;
     private CanvasserAddToTeam model = new CanvasserAddToTeam();
     private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()

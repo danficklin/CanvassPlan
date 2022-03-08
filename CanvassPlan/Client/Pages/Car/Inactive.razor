@@ -32,8 +32,11 @@ else
                         <td>@car.Name</td>
                         <td>
                             <a href=@($"car/{car.CarId}") class="btn btn-outline-info">Details</a>
+                            <span style="width: 5px"></span>
                             <a href=@($"car/edit/{car.CarId}") class="btn btn-outline-secondary">Edit</a>
+                            <span style="width: 5px"></span>
                             <a href=@($"car/delete/{car.CarId}") class="btn btn-outline-danger">Delete</a>
+                            <span style="width: 5px"></span>
                             <a class="btn btn-outline-danger" @onclick="() => ToggleActive(car)">Activate</a>
                         </td>
                     </tr>
