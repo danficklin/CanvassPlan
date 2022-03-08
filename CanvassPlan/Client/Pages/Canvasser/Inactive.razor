@@ -32,8 +32,11 @@ else
                         <td>@canvasser.Name</td>
                         <td>
                             <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                            <span style="width: 5px"></span>
                             <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
+                            <span style="width: 5px"></span>
                             <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                            <span style="width: 5px"></span>
                             <a class="btn btn-outline-danger" @onclick="() => ToggleActive(canvasser)">Activate</a>
                         </td>
                     </tr>
