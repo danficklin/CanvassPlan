@@ -13,31 +13,43 @@
 }
 
 <div class="container">
-    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group">
-            <label>Which site ID?</label>
-            <InputNumber class="form-control" @bind-Value="model.SiteId" />
-            
-            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
-        </div>
-    </EditForm> 
+
+    @if (Sites != null)
+    {
+        <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label>Select a Site</label>
+
+                <InputSelect class="form-control" @bind-Value="model.SiteId">
+
+                    @foreach (var site in Sites)
+                    {
+                        if (site.IsActive == false) { <option value="@site.SiteId">@site.Name</option> }
+                    }
+                </InputSelect>
+                <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+            </div>
+    </EditForm>
+    }
 </div>
 
 @code {
     [Parameter]
     public int CanvasserId { get; set; }
+    private List<SiteListItem> Sites;
     private CanvasserAddToSite model = new CanvasserAddToSite();
     private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        Sites = await http.GetFromJsonAsync<List<SiteListItem>>("api/site");
         model = await http.GetFromJsonAsync<CanvasserAddToSite>($"/api/canvasser/{CanvasserId}");
     }
     private async void HandleSubmit()
     {
         var editRes = await http.PutAsJsonAsync<CanvasserAddToSite>($"/api/canvasser/site/{CanvasserId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/site/{model.SiteId}"); }
+        if (editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/site/{model.SiteId}"); }
         else { ErrorMessage = "Could add this canvasser to the site. Please try again."; }
     }
 }

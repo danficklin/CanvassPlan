@@ -1,6 +1,7 @@
 ﻿@page "/canvasser/{CanvasserId:int}"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 
 @if (Canvasser!= null)
@@ -58,7 +59,13 @@
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
                 <a href=@($"/canvasser/edit/{CanvasserId}") class="btn btn-outline-secondary">Edit</a>
-                <a href=@($"/canvasser/delete/{CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                <span style="width: 15px"></span>
+                @if (Canvasser.IsActive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Canvasser)">Deactivate</a> }
+                else if (Canvasser.IsActive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Canvasser)">Activate</a> }
+                <span style="width: 15px"></span>
+                <hr />
+                @if (Canvasser.IsAbsent == false) { <a class="btn btn-secondary" @onclick="() => ToggleAbsent(Canvasser)">Mark as Absent</a> }
+                else if (Canvasser.IsAbsent == true) { <a class="btn btn-outline-secondary" @onclick="() => ToggleAbsent(Canvasser)">Mark as Present</a> }
                 <hr />
                 <a href=@($"/canvasser/team/{CanvasserId}") class="btn btn-outline-success">Add to Team</a>
                 <hr />
@@ -84,11 +91,28 @@ else
     int carsCount;
     int sitesCount;
     int teamsCount;
+    private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
     {
         Canvasser = await http.GetFromJsonAsync<CanvasserDetail>($"api/canvasser/{CanvasserId}");
         carsCount = Canvasser.Cars.Count;
         sitesCount = Canvasser.Sites.Count;
         teamsCount = Canvasser.Teams.Count;
+    }
+
+    private async void ToggleActive(CanvasserDetail canvasser)
+    {
+        canvasser.IsActive = !canvasser.IsActive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/active/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{canvasser.CanvasserId}"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+
+    private async void ToggleAbsent(CanvasserDetail canvasser)
+    {
+        canvasser.IsAbsent = !canvasser.IsAbsent;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/absent/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{canvasser.CanvasserId}"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
 }

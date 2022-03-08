@@ -146,7 +146,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
             foreach (Team t in entity) 
             { 
-                t.IsActive = false; 
+                t.IsActive = true; 
             }
             return await _ctx.SaveChangesAsync() == 1;
         }

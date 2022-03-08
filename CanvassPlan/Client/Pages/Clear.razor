@@ -15,7 +15,7 @@
     <div class="container">
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Confirm Clear</a>
+                <a href="#" @onclick="() => DeactivateAllTeams()" class="btn btn-danger text-white">Confirm Clear</a>
             </div>
         </div>
     </div>
@@ -23,15 +23,29 @@
 
 @code {
     public string Message { get; set; }
-    private List<TeamsClear> Model = new List<TeamsClear>();
+    private List<TeamListItem> Teams;
+    private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Model = await http.GetFromJsonAsync<List<TeamsClear>>("api/team"); 
+        Teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
     }
-    private async void HandleClick()
+
+    private async void DeactivateAllTeams()
     {
-        var clearRes = await http.PutAsJsonAsync($"/api/clear", Model);
-        if(clearRes.IsSuccessStatusCode) { navigation.NavigateTo("/"); } 
-        else { Message = "Failed to clear teams. Please try again."; }
+        bool AllSuccessful = false;
+        foreach (var t in Teams)
+        {
+            if (t.IsActive == false)
+            {
+                t.IsActive = !t.IsActive;
+                var toggleRes = await http.PutAsJsonAsync<object>($"api/team/active/{t.TeamId}", new());
+                if(toggleRes.IsSuccessStatusCode) { AllSuccessful = true; }
+                else { AllSuccessful = false; }
+            }
+        }
+        if (AllSuccessful == true)
+        {
+            navigation.NavigateTo($"/team/");
+        } else { ErrorMessage = "Could not deactivate all teams. Please try again."; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/site/{siteId:int}"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 
 @if (Site!= null)
@@ -17,18 +18,19 @@
                 @if (Site.Drop != 0) { <h4 class="card-title text-dark">Drop Order: @Site.Drop </h4> }
                 @if (Site.DropDistance != 0) { <h4 class="card-title text-dark">Distance from Office: @Site.DropDistance miles </h4> }
                 @if (Site.DropAddress != null) { <h4 class="card-title text-dark">Address: @Site.DropAddress </h4> }  
-                @if (Site.IsActive == false) { <h4 class="card-title text-dark">This site is inactive. </h4> }
-                @if (Site.Notes != null) { <h4 class="card-title text-dark">Notes: @Site.Notes </h4> }  
-            </div>
-            <div class="card-body">
+                @if (Site.IsActive == true) { <h4 class="card-title text-danger">This site is inactive. </h4> }
+                @if (Site.Notes != null) { <h4 class="card-title text-dark">Notes: @Site.Notes </h4> } 
+                @if(Site.Canvassers?.LastOrDefault() != default) {
+                <h4 class="card-title text-dark">Most Recent Canvasser: @Site.Canvassers.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark">No canvassers have ever been assigned to this site.</p> }
                 @if(canvassersCount > 0)
                 {
-                    <h4 class="text-dark">Canvassers</h4> 
+                    <h4 class="text-dark">All Canvassers</h4> 
                     @foreach(CanvasserListItem c in Site.Canvassers)
                     {
-                        <h4>@c.Name</h4>
+                        <p class="text-dark">@c.Name</p>
                     }
-                } else { <p class="card-text text-dark">No canvassers currently assigned.</p> }
+                } else { <p class="card-text text-dark">No canvassers have ever been assigned to this site.</p> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
                 <span class="text-left text-dark">Created: @Site.DateCreated</span>
@@ -37,8 +39,13 @@
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
-                <a href=@($"/site/edit/{SiteId}") class="btn btn-outline-primary">Edit</a>
-                <a href=@($"/site/delete/{SiteId}") class="btn btn-outline-danger">Delete</a>
+                <a href=@($"/site/edit/{SiteId}") class="btn btn-outline-secondary">Edit</a>
+                <span style="width: 15px"></span>
+                @if (Site.IsActive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Site)">Deactivate</a> }
+                else if (Site.IsActive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Site)">Activate</a> }
+                <span style="width: 15px"></span>
+                <hr />
+                <a href=@($"/site/canvasser/{SiteId}") class="btn btn-outline-primary">Assign to Canvasser</a>
                 <hr />
                 <a href="/site">Back to List of Sites</a>
             </div>
@@ -55,9 +62,18 @@ else
     public int SiteId { get; set; }
     private SiteDetail Site = new SiteDetail();
     int canvassersCount;
+    private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
     {
         Site = await http.GetFromJsonAsync<SiteDetail>($"api/site/{SiteId}");
         canvassersCount = Site.Canvassers.Count;
+    }
+
+    private async void ToggleActive(SiteDetail site)
+    {
+        site.IsActive = !site.IsActive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/car/active/{site.SiteId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{site.SiteId}"); }
+        else { ErrorMessage = "Could not modify this site. Please try again."; }
     }
 }

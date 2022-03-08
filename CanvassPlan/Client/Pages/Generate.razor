@@ -1,36 +1,86 @@
-﻿@page "/generate"
+﻿@page "/generate/"
 @attribute [Authorize]
 @inject HttpClient http
 @inject NavigationManager navigation
 
-<h3>Generate Team</h3>
+<h3>Generate Canvass Plan</h3>
 
-@if (Message != null)
-{
-    <h2 class="text-danger">@Message</h2>
-}
-@if (Team != null)
-{
+<p>So far, this only generates a team for each active driver that is not absent, provided the number of teams does not exceed the number of cars.</p>
+
+
     <div class="container">
-        <div class="sited">
-            <div class="sited-header d-flex justify-content-between">
-                <span>@Team.Name</span>
-                <span class="text-muted"><strong>ID: @Team.TeamId</strong></span>
-            </div>
-        </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <a href=@($"/team/{TeamId}") class="btn btn-outline-primary">View Details</a>
-                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Team</a>
+                <button @onclick="() => CreateTeamForEachPresentDriver()" class="btn btn-danger text-white">Generate Plan</button>
             </div>
         </div>
     </div>
-}
-else
-{
-    <p>Loading...</p>
-}
 
 @code {
-    
+    private List<CanvasserListItem> Canvassers;
+    private List<CarListItem> Cars;
+    private List<SiteListItem> Sites;
+    private List<TeamListItem> Teams;
+    private TeamCreate model = new();
+    private string message;
+    Random random = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Canvassers = await http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
+        Cars = await http.GetFromJsonAsync<List<CarListItem>>("api/car"); 
+        Sites = await http.GetFromJsonAsync<List<SiteListItem>>("api/site"); 
+        Teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
+    }
+
+
+    private async void CreateTeamForEachPresentDriver()
+    {
+        bool AllSuccessful = false;
+        int teamsMade = 0;
+        int activeCars = 0;
+        foreach (var c in Cars)
+        {
+            if (c.IsActive == true)
+            {
+                activeCars++;
+            }
+        }
+        foreach (var d in Canvassers)
+        {
+            if (d.IsDriver == true && d.IsActive == false && d.IsAbsent == false) 
+            {
+                if (teamsMade < activeCars)
+                {
+                    model.Name = d.Name;
+                    teamsMade++;
+                    var createRes = await http.PostAsJsonAsync<TeamCreate>("/api/team", model);
+                    if (createRes.IsSuccessStatusCode) { AllSuccessful = true; }
+                    else { AllSuccessful = false; }
+                }
+            }
+        }
+        if (AllSuccessful == true) { navigation.NavigateTo($"/team/"); }
+        else { message = "Could not generate a plan. Please try again later."; }
+        }
+
+    //private async void GeneratePlan()
+    //{
+        
+
+        //async void AddCarToEachTeam ()
+        //{
+
+        //}
+
+        //async void AddTraineesToTeams ()
+        //{
+
+        //}
+
+        //asnyc void AddLeadersToTeams ()
+        //{
+        
+        //}
+    //}
 }

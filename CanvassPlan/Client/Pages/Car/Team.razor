@@ -13,31 +13,44 @@
 }
 
 <div class="container">
-    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group">
-            <label>Which team ID?</label>
-            <InputNumber class="form-control" @bind-Value="model.TeamId" />
-            
-            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
-        </div>
-    </EditForm> 
+
+    @if (Teams != null)
+    {
+        <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label>Select a Team</label>
+
+                <InputSelect class="form-control" @bind-Value="model.TeamId">
+
+                    @foreach (var team in Teams)
+                    {
+                        if (team.IsActive == false) { <option value="@team.TeamId">@team.TeamId - @team.Name</option> }
+                    }
+                </InputSelect>
+                <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+            </div>
+    </EditForm>
+    }
 </div>
+
 
 @code {
     [Parameter]
     public int CarId { get; set; }
+    private List<TeamListItem> Teams;
     private CarAddToTeam model = new CarAddToTeam();
     private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        Teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team");
         model = await http.GetFromJsonAsync<CarAddToTeam>($"/api/car/{CarId}");
     }
     private async void HandleSubmit()
     {
         var editRes = await http.PutAsJsonAsync<CarAddToTeam>($"/api/car/team/{CarId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{model.TeamId}"); }
+        if (editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{model.TeamId}"); }
         else { ErrorMessage = "Could add this car to the team. Please try again."; }
     }
 }

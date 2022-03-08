@@ -1,6 +1,7 @@
 ﻿@page "/car/{CarId:int}"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 
 @if (Car!= null)
@@ -43,9 +44,14 @@
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
                 <a href=@($"/car/edit/{CarId}") class="btn btn-outline-secondary">Edit</a>
-                <a href=@($"/car/delete/{CarId}") class="btn btn-outline-danger">Delete</a>
+                <span style="width: 15px"></span>
+                @if (Car.IsActive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Car)">Deactivate</a> }
+                else if (Car.IsActive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Car)">Activate</a> }
+                <span style="width: 15px"></span>
                 <hr />
-                <a href=@($"/car/team/{CarId}") class="btn btn-outline-success">Add to Team</a>
+                <a href=@($"/car/team/{CarId}") class="btn btn-outline-success">Assign to Team</a>
+                <hr />
+                <a href=@($"/car/canvasser/{CarId}") class="btn btn-outline-primary">Assign to Canvasser</a>
                 <hr />
                 <a href="/car">Back to List of Cars</a>
             </div>
@@ -62,9 +68,18 @@ else
     public int CarId { get; set; }
     private CarDetail Car = new CarDetail();
     int ridersCount;
+    private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
     {
         Car = await http.GetFromJsonAsync<CarDetail>($"api/car/{CarId}");
         ridersCount = Car.Riders.Count;
+    }
+
+    private async void ToggleActive(CarDetail car)
+    {
+        car.IsActive = !car.IsActive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/car/active/{car.CarId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{car.CarId}"); }
+        else { ErrorMessage = "Could not modify this car. Please try again."; }
     }
 }

@@ -209,6 +209,16 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             return await _ctx.SaveChangesAsync() == 1;
         }
 
+        public async Task<bool> ToggleDriverAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Canvassers.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsDriver = !entity.IsDriver;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
         public async Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCar model)
         {
             {

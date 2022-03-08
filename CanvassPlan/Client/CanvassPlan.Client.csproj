@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Generate.razor" />
     <Content Remove="Pages\Team\Manipulate.razor" />
   </ItemGroup>
 

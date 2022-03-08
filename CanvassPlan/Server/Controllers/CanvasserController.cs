@@ -92,6 +92,16 @@ namespace CanvassPlan.Server.Controllers
             return BadRequest();
         }
 
+        [HttpPut("driver/{id}")]
+        public async Task<IActionResult> ToggleDriver(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _canvasserService.ToggleDriverAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
