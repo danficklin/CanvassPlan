@@ -1,36 +1,155 @@
-﻿@page "/generate"
+﻿@page "/generate/"
 @attribute [Authorize]
 @inject HttpClient http
 @inject NavigationManager navigation
-
-<h3>Generate Team</h3>
 
 @if (Message != null)
 {
     <h2 class="text-danger">@Message</h2>
 }
-@if (Team != null)
-{
-    <div class="container">
-        <div class="sited">
-            <div class="sited-header d-flex justify-content-between">
-                <span>@Team.Name</span>
-                <span class="text-muted"><strong>ID: @Team.TeamId</strong></span>
-            </div>
+
+<h3>Generate Canvass Plan</h3>
+
+<p>So far, this only generates a team for each active driver that is not absent, provided the number of teams does not exceed the number of cars. Teams are named after random colors by default.</p>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="nameTeamsAfterDriversChecked" @onclick="@NameTeamsAfterDrivers">
+            <label class="form-check-label" for="nameTeamsAfterDriversChecked">Name teams after drivers?</label>
         </div>
+    </div>
+</div>
+
+<hr />
+
+
+    <div class="container">
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <a href=@($"/team/{TeamId}") class="btn btn-outline-primary">View Details</a>
-                <a href="#" @onclick="HandleClick" class="btn btn-danger text-white">Delete Team</a>
+                <button @onclick="() => CreateTeamForEachPresentDriver()" class="btn btn-success text-white">Generate Teams</button>
             </div>
         </div>
     </div>
-}
-else
-{
-    <p>Loading...</p>
-}
+
+    <div class="container">
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <button @onclick="() => AddCarToEachTeam()" class="btn btn-info text-white">Assign Cars to Teams</button>
+            </div>
+        </div>
+    </div>
 
 @code {
-    
+    public string Message { get; set; }
+    private List<CanvasserListItem> Canvassers;
+    private List<CarListItem> Cars;
+    private List<SiteListItem> Sites;
+    private List<TeamListItem> Teams;
+    private TeamCreate team = new();
+    private CarAddToTeam car = new();
+    private string errorMessage;
+    Random random = new Random();
+    private bool nameTeamsAfterDriversChecked { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Canvassers = await http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
+        Cars = await http.GetFromJsonAsync<List<CarListItem>>("api/car"); 
+        Sites = await http.GetFromJsonAsync<List<SiteListItem>>("api/site"); 
+        Teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
+    }
+
+    private async Task NameTeamsAfterDrivers()
+    {
+        nameTeamsAfterDriversChecked = !nameTeamsAfterDriversChecked;
+    }
+
+    private async void CreateTeamForEachPresentDriver()
+    {
+        bool CreateTeamsSuccessful = false;
+        int teamsMade = 0;
+        int activeCars = 0;
+        List<CanvasserListItem> Drivers = Canvassers.Where(c => c.IsDriver == true).ToList();
+        List<string> TeamNames = new List<string> { "Blue", "Green", "Orange", "Violet", "Gold", "Indigo", "Aqua", "Maroon", "Crimson", "Azure", "Silver", "Cyan", "Rose", "Magenta", "Sienna" };
+        foreach (var c in Cars)
+        {
+            if (c.Inactive == false)
+            {
+                activeCars++; 
+            }
+        }
+        while (teamsMade < activeCars)
+        {
+            var d = Drivers[random.Next(Drivers.Count)];
+            var n = TeamNames[random.Next(TeamNames.Count)];
+            if (d.IsDriver == true && d.Inactive == false && d.IsAbsent == false) 
+            {
+                if (nameTeamsAfterDriversChecked == true) { team.Name = d.Name; }
+                else { team.Name = n; }
+                teamsMade++;
+                var createRes = await http.PostAsJsonAsync<TeamCreate>("/api/team", team);
+                if (createRes.IsSuccessStatusCode) { CreateTeamsSuccessful = true; }
+                else { CreateTeamsSuccessful = false; }
+            }
+            Drivers.Remove(d);
+            TeamNames.Remove(n);
+        }
+        if (CreateTeamsSuccessful == true) { navigation.NavigateTo($"/team/"); }
+        else { errorMessage = "Could not generate a plan. Please try again later."; }
+    }
+
+    private async void AddCarToEachTeam()
+    {
+        bool AddCarSuccessful = false;
+        int carsAssigned = 0;
+        List<CarListItem> ActiveCars = Cars.Where(a => a.Inactive == false).ToList();
+        List<TeamListItem> ActiveTeams = Teams.Where(t => t.Inactive == false).ToList();
+        List<TeamListItem> CarlessTeams = ActiveTeams.Where(c => c.Cars.Count == 0).ToList();
+        while (carsAssigned < ActiveCars.Count && carsAssigned < ActiveTeams.Count)
+        {
+            var c = ActiveCars[random.Next(ActiveCars.Count)];
+            var t = CarlessTeams[random.Next(CarlessTeams.Count)];
+            if (t.Inactive == false)
+            {
+                car.CarId = c.CarId;
+                car.TeamId = t.TeamId;
+                var addRes = await http.PutAsJsonAsync<CarAddToTeam>($"api/car/team/{t.TeamId}", car);
+                if (addRes.IsSuccessStatusCode) { AddCarSuccessful = true; errorMessage = "Cars added to teams successfully."; }
+                else { AddCarSuccessful = false; }
+            }
+            ActiveCars.Remove(c);
+            CarlessTeams.Remove(t);
+        }
+    }
+
+    //private async void GeneratePlan()
+    //{
+    //    bool AllSuccessful = false;
+
+    //    CreateTeamForEachPresentDriver();
+    //    AddCarToEachTeam();
+    //    {
+
+    //    }
+
+    //    async void AddTraineesToTeams ()
+    //    {
+
+    //    }
+
+    //    asnyc void AddLeadersToTeams ()
+    //    {
+
+    //    }
+    //    if(CreateTeamSuccessful && AddCarSuccessful == true) { AllSuccessful = true; }
+    //    AllSuccessful = true;
+    //    if (AllSuccessful == true) 
+    //    { 
+    //    navigation.NavigateTo($"/team/"); 
+    //    }
+    //    else { errorMessage = "Could not generate a plan. Please try again later."; }
+    //}
 }

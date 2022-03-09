@@ -25,7 +25,7 @@ namespace CanvassPlan.Server.Services.TeamServices
                 Name = model.Name,
                 Notes = model.Notes,
                 DateCreated = DateTimeOffset.Now,
-                IsActive = false,
+                Inactive = false,
                 OwnerId = _userId
             };
             _ctx.Teams.Add(entity);
@@ -60,7 +60,7 @@ namespace CanvassPlan.Server.Services.TeamServices
                 TeamId = teamId,
                 Name = entity.Name,
                 Notes = entity.Notes,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -89,7 +89,7 @@ namespace CanvassPlan.Server.Services.TeamServices
                 TeamId = entity.TeamId,
                 Name = name,
                 Notes = entity.Notes,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -114,7 +114,7 @@ namespace CanvassPlan.Server.Services.TeamServices
                 {
                     TeamId = t.TeamId,
                     Name = t.Name,
-                    IsActive = t.IsActive,
+                    Inactive = t.Inactive,
                 });
             return await query.ToListAsync();
         }
@@ -126,7 +126,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             if (entity?.OwnerId != _userId) return false;
             entity.Name = model.Name;
             entity.Notes = model.Notes;
-            entity.IsActive = model.IsActive;
+            entity.Inactive = model.Inactive;
             entity.DateModified = DateTimeOffset.Now;
             return await _ctx.SaveChangesAsync() == 1;
         }
@@ -136,7 +136,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             if (id == default) return false;
             var entity = await _ctx.Teams.FindAsync(id);
             if (entity?.OwnerId != _userId) return false;
-            entity.IsActive = !entity.IsActive;
+            entity.Inactive = !entity.Inactive;
 
             return await _ctx.SaveChangesAsync() == 1;
         }
@@ -146,7 +146,7 @@ namespace CanvassPlan.Server.Services.TeamServices
             var entity = await _ctx.Teams.Where(t => t.OwnerId == _userId).ToListAsync();
             foreach (Team t in entity) 
             { 
-                t.IsActive = false; 
+                t.Inactive = true; 
             }
             return await _ctx.SaveChangesAsync() == 1;
         }

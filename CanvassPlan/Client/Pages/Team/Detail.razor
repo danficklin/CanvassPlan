@@ -1,6 +1,7 @@
 ﻿@page "/team/{TeamId:int}"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 
 @if (Team!= null)
@@ -9,8 +10,8 @@
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <span text-dark>Name: @Team.Name</span>
-                <span class="text-muted text-dark"><strong>@Team.TeamId</strong></span>
+                <span class="text-dark">Name: @Team.Name</span>
+                <span class="text-muted"><strong>@Team.TeamId</strong></span>
             </div>
             <div class="card-body text-dark">
                 @if(Team.Cars?.LastOrDefault() != default) {
@@ -21,10 +22,10 @@
                     <h4 class="text-dark">Canvassers</h4> 
                     @foreach(CanvasserListItem c in Team.Canvassers)
                     {
-                        <h4 class="text-dark">@c.Name</h4>
+                        <p class="text-dark">@c.Name</p>
                     }
                 } else { <p class="card-text text-dark">No canvassers currently assigned.</p> }
-                @if (Team.IsActive == true) { <h4 class="card-text text-danger">This team is inactive. </h4> }
+                @if (Team.Inactive == true) { <h4 class="card-text text-danger">This team is inactive. </h4> }
                 @if (Team.Notes != null) { <h4 class="card-title text-dark">Notes: @Team.Notes </h4> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
@@ -34,8 +35,14 @@
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-25">
-                <a href=@($"/team/edit/{TeamId}") class="btn btn-outline-primary">Edit</a>
-                <a href=@($"/team/delete/{TeamId}") class="btn btn-outline-danger">Delete</a>
+                <a href=@($"/team/edit/{TeamId}") class="btn btn-outline-secondary">Edit</a>
+                <span style="width: 15px"></span>
+                @if (Team.Inactive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Team)">Deactivate</a> }
+                else if (Team.Inactive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Team)">Activate</a> }
+                <span style="width: 15px"></span>
+                <hr />
+                <hr />
+                <a href=@($"/team/canvasser/{TeamId}") class="btn btn-outline-primary">Assign to Canvasser</a>
                 <hr />
                 <a href="/team">Back to List of Teams</a>
             </div>
@@ -52,9 +59,18 @@ else
     public int TeamId { get; set; }
     private TeamDetail Team { get; set; } = new TeamDetail();
     int canvassersCount;
+    private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
     {
         Team = await http.GetFromJsonAsync<TeamDetail>($"api/team/{TeamId}");
         canvassersCount = Team.Canvassers.Count;
+    }
+
+    private async void ToggleActive(TeamDetail team)
+    {
+        team.Inactive = !team.Inactive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/team/active/{team.TeamId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/{team.TeamId}"); }
+        else { ErrorMessage = "Could not modify this team. Please try again."; }
     }
 }

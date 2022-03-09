@@ -1,8 +1,6 @@
-﻿using System;
+﻿using CanvassPlan.Shared.Models.Canvasser;
+using CanvassPlan.Shared.Models.Team;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CanvassPlan.Shared.Models.Car
 {
@@ -10,6 +8,9 @@ namespace CanvassPlan.Shared.Models.Car
     {
         public int CarId { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
+        public ICollection<CanvasserListItem> Riders { get; set; }
+        public ICollection<TeamListItem> Teams { get; set; }
+
     }
 }

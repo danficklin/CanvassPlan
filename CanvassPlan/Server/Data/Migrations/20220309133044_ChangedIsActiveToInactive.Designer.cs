@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CanvassPlan.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220304161649_AddedNotesAttributesToAll")]
-    partial class AddedNotesAttributesToAll
+    [Migration("20220309133044_ChangedIsActiveToInactive")]
+    partial class ChangedIsActiveToInactive
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,10 +105,10 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<bool>("DroveYesterday")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAbsent")
+                    b.Property<bool>("Inactive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Inactive")
+                    b.Property<bool>("IsAbsent")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDriver")

@@ -90,15 +90,15 @@ namespace CanvassPlan.Server.Controllers
             return Ok();
         }
 
-        [HttpPut("team/{carId}")]
-        public async Task<IActionResult> AddCarToTeam(int carId, CarAddToTeam model)
+        [HttpPut("team/{id}")]
+        public async Task<IActionResult> AddCarToTeam(int id, CarAddToTeam model)
         {
             if (!SetUserIdInService()) return Unauthorized();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return await _carService.AddCarToTeamAsync(carId, model)
+            return await _carService.AddCarToTeamAsync(id, model)
                 ? Ok("Car was added to the team successfully!")
                 : BadRequest("Car could not be added to the team. Please try again.");
         }

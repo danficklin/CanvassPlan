@@ -24,7 +24,7 @@ else
         </thead>
         <tbody>
             @foreach (var site in _sites)
-            @if (site.IsActive == false)
+            @if (site.Inactive == false)
                     {
                         {
                             <tr>
@@ -36,6 +36,9 @@ else
                             <a href=@($"site/edit/{site.SiteId}") class="btn btn-outline-secondary">Edit</a>
                             <span style="width: 5px"></span>
                             <button class="btn btn-danger" @onclick="() => ToggleActive(site)">Deactivate</button>
+                            <span style="width: 5px"></span>
+                            <a href=@($"/site/canvasser/{site.SiteId}") class="btn btn-outline-primary">Assign to Canvasser</a>
+                            <span style="width: 5px"></span>
                         </td>
                     </tr>
                 }
@@ -54,7 +57,7 @@ else
 
     private async void ToggleActive(SiteListItem site)
     {
-        site.IsActive = !site.IsActive;
+        site.Inactive = !site.Inactive;
         var toggleRes = await http.PutAsJsonAsync<object>($"api/site/active/{site.SiteId}", new());
         if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/site/"); }
         else { ErrorMessage = "Could not modify this canvasser. Please try again."; }

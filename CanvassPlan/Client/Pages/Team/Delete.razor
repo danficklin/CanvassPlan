@@ -31,7 +31,7 @@
                         <h4 class="text-dark">@c.Name</h4>
                     }
                 } else { <p class="card-text text-dark">No canvassers currently assigned.</p> }
-                @if (Team.IsActive == true) { <h4 class="card-title text-dark">This team is inactive. </h4> }
+                @if (Team.Inactive == true) { <h4 class="card-title text-dark">This team is inactive. </h4> }
                 @if (Team.Notes != null) { <h4 class="card-title text-dark">Notes: @Team.Notes </h4> } 
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">

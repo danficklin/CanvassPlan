@@ -13,6 +13,6 @@ namespace CanvassPlan.Shared.Models.Canvasser
         public bool IsDriver { get; set; }
         public bool IsLeader { get; set; }
         public bool IsTraining { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
     }
 }

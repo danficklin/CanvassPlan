@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.13" />
+    <Compile Remove="Services\GenerateServices\**" />
+    <Content Remove="Services\GenerateServices\**" />
+    <EmbeddedResource Remove="Services\GenerateServices\**" />
+    <None Remove="Services\GenerateServices\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\CanvassPlan.Client.csproj" />
-    <ProjectReference Include="..\Shared\CanvassPlan.Shared.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,11 @@
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="5.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\CanvassPlan.Client.csproj" />
+    <ProjectReference Include="..\Shared\CanvassPlan.Shared.csproj" />
   </ItemGroup>
 
 </Project>

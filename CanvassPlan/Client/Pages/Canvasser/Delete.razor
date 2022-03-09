@@ -48,7 +48,7 @@
 
                 @if(Canvasser.IsTraining == true) { <p class="card-text text-dark">This canvasser is still in training.</p>}
 
-                @if(Canvasser.IsActive == true) { <p class="card-text text-danger">This canvasser is inactive.</p>}
+                @if(Canvasser.Inactive == true) { <p class="card-text text-danger">This canvasser is inactive.</p>}
 
                @*@if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">Do not pair this canvasser with the following canvassers: @Canvasser.DoNotPair</p>}
 

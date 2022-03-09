@@ -6,6 +6,6 @@ namespace CanvassPlan.Shared.Models.Canvasser
     {
         [Required]
         public int CanvasserId { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
     }
 }

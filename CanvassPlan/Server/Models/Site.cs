@@ -18,7 +18,7 @@ namespace CanvassPlan.Server.Models
         public int Drop { get; set; }
         public double DropDistance { get; set; }
         public string DropAddress { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
         public ICollection<Canvasser> Canvassers { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset? DateModified { get; set; }

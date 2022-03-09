@@ -9,6 +9,6 @@ namespace CanvassPlan.Shared.Models.Team
     {
         public string Name { get; set; }
         public string Notes { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
     }
 }

@@ -13,31 +13,43 @@
 }
 
 <div class="container">
-    <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group">
-            <label>Which car ID?</label>
-            <InputNumber class="form-control" @bind-Value="model.CarId" />
-            
-            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
-        </div>
-    </EditForm> 
+
+    @if (Cars != null)
+    {
+        <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label>Select a Car</label>
+
+                <InputSelect class="form-control" @bind-Value="model.CarId">
+
+                    @foreach (var car in Cars)
+                    {
+                        if (car.Inactive == false) { <option value="@car.CarId">@car.Name</option> }
+                    }
+                </InputSelect>
+                <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+            </div>
+    </EditForm>
+    }
 </div>
 
 @code {
     [Parameter]
     public int CanvasserId { get; set; }
+    private List<CarListItem> Cars;
     private CanvasserAddToCar model = new CanvasserAddToCar();
     private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        Cars = await http.GetFromJsonAsync<List<CarListItem>>("api/car");
         model = await http.GetFromJsonAsync<CanvasserAddToCar>($"/api/canvasser/{CanvasserId}");
     }
     private async void HandleSubmit()
     {
         var editRes = await http.PutAsJsonAsync<CanvasserAddToCar>($"/api/canvasser/car/{CanvasserId}", model);
-        if(editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{model.CarId}"); }
-        else { ErrorMessage = "Could add this canvasser to the car. Please try again."; }
+        if (editRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{model.CarId}"); }
+        else { ErrorMessage = "Could add this canvasser to the car. Canvasser might already be assigned to that car."; }
     }
 }
