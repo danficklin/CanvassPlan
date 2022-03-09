@@ -30,7 +30,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = model.Make,
                 Model = model.Model,
                 Year = model.Year,
-                IsActive = false,
+                Inactive = false,
                 DateCreated = DateTimeOffset.Now,
                 OwnerId = _userId
             };
@@ -62,7 +62,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
@@ -96,7 +96,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 Make = entity.Make,
                 Model = entity.Model,
                 Year = entity.Year,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Riders = entity.Riders.Select(t => new CanvasserListItem
                 {
                     CanvasserId = t.CanvasserId,
@@ -120,7 +120,7 @@ namespace CanvassPlan.Server.Services.CarServices
                 {
                     CarId = c.CarId,
                     Name = c.Name,
-                    IsActive = c.IsActive,
+                    Inactive = c.Inactive,
                 });
             return await carQuery.ToListAsync();
 
@@ -137,7 +137,7 @@ namespace CanvassPlan.Server.Services.CarServices
             entity.Make = model.Make;
             entity.Model = model.Model;
             entity.Year = model.Year;
-            entity.IsActive = model.IsActive;
+            entity.Inactive = model.Inactive;
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;
@@ -148,7 +148,7 @@ namespace CanvassPlan.Server.Services.CarServices
             if (id == default) return false;
             var entity = await _ctx.Cars.FindAsync(id);
             if (entity?.OwnerId != _userId) return false;
-            entity.IsActive = !entity.IsActive;
+            entity.Inactive = !entity.Inactive;
 
             return await _ctx.SaveChangesAsync() == 1;
         }

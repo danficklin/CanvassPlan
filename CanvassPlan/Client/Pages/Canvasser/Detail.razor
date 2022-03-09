@@ -20,17 +20,17 @@
                     <h4 class="card-title text-dark">Personal Phone Number: @Canvasser.AltPhone </h4>
                 }
 
-                @if(Canvasser.Teams?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Team: @Canvasser.Teams.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text text-dark"> Not currently assigned to a team.</p>}
+                @if(Canvasser.Teams?.LastOrDefault() == default) { <p class="card-text text-dark"> Never assigned to a team.</p> }
+                else if (Canvasser.Teams.LastOrDefault()?.Inactive == true) { <p class="card-text text-dark"> Not currently assigned to a team.</p>}
+                else {  <h4 class="card-title text-dark">Current Team: @Canvasser.Teams.LastOrDefault()?.Name</h4> }
 
                 @if(Canvasser.Sites?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Site: @Canvasser.Sites.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text text-dark"> Not currently assigned to a site.</p>}
+                <h4 class="card-title text-dark">Last Assigned Site: @Canvasser.Sites.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> Never assigned to a site.</p>}
 
                 @if(Canvasser.Cars?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Car: @Canvasser.Cars.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text text-dark"> Not currently assigned to a car.</p>}
+                <h4 class="card-title text-dark">Last Assigned Car: @Canvasser.Cars.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> Never assigned to a car.</p>}
 
                 @if(Canvasser.IsAbsent == true) { <p class="card-text text-secondary">This canvasser is absent.</p>}
 
@@ -42,7 +42,7 @@
 
                 @if(Canvasser.IsTraining == true) { <p class="card-text text-dark">This canvasser is still in training.</p>}
 
-                @if(Canvasser.IsActive == true) { <p class="card-text text-danger">This canvasser is inactive.</p>}
+                @if(Canvasser.Inactive == true) { <p class="card-text text-danger">This canvasser is inactive.</p>}
 
                @*@if(Canvasser.DoNotPair.Count > 0) { <p class="card-text">Do not pair this canvasser with the following canvassers: @Canvasser.DoNotPair</p>}
 
@@ -60,8 +60,8 @@
             <div class="text-center justify-content-between w-25">
                 <a href=@($"/canvasser/edit/{CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                 <span style="width: 15px"></span>
-                @if (Canvasser.IsActive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Canvasser)">Deactivate</a> }
-                else if (Canvasser.IsActive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Canvasser)">Activate</a> }
+                @if (Canvasser.Inactive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Canvasser)">Deactivate</a> }
+                else if (Canvasser.Inactive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Canvasser)">Activate</a> }
                 <span style="width: 15px"></span>
                 <hr />
                 @if (Canvasser.IsAbsent == false) { <a class="btn btn-secondary" @onclick="() => ToggleAbsent(Canvasser)">Mark as Absent</a> }
@@ -102,7 +102,7 @@ else
 
     private async void ToggleActive(CanvasserDetail canvasser)
     {
-        canvasser.IsActive = !canvasser.IsActive;
+        canvasser.Inactive = !canvasser.Inactive;
         var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/active/{canvasser.CanvasserId}", new());
         if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/{canvasser.CanvasserId}"); }
         else { ErrorMessage = "Could not modify this canvasser. Please try again."; }

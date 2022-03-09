@@ -39,7 +39,7 @@ else
             {
                 if (!hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == true && canvasser.IsLeader == true)
+                    @if (canvasser.Inactive == true && canvasser.IsLeader == true)
                     {
                         <tr>
                             <td>@canvasser.CanvasserId</td>
@@ -54,7 +54,7 @@ else
                 }
                 else if (hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == true && canvasser.IsLeader == true)
+                    @if (canvasser.Inactive == true && canvasser.IsLeader == true)
                     {
                         if (canvasser.IsAbsent == false)
                         {

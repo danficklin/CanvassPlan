@@ -25,7 +25,7 @@ else
         <tbody>
             @foreach (var car in _cars)
             {
-                @if (car.IsActive == false)
+                @if (car.Inactive == false)
                 {
                     <tr>
                         <td>@car.CarId</td>
@@ -58,7 +58,7 @@ else
 
     private async void ToggleActive(CarListItem car)
     {
-        car.IsActive = !car.IsActive;
+        car.Inactive = !car.Inactive;
         var toggleRes = await http.PutAsJsonAsync<object>($"api/car/active/{car.CarId}", new());
         if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/"); }
         else { ErrorMessage = "Could not modify this canvasser. Please try again."; }

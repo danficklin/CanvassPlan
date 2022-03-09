@@ -18,7 +18,7 @@ namespace CanvassPlan.Server.Services.GenerateServices
         private string message;
         Random random = new Random();
 
-        private async void CreateTeamForEachPresentDriver()
+        private async bool CreateTeamForEachPresentDriver()
         {
             bool AllSuccessful = false;
             int teamsMade = 0;
@@ -26,7 +26,7 @@ namespace CanvassPlan.Server.Services.GenerateServices
             List<CanvasserListItem> Drivers = Canvassers.Where(c => c.IsDriver == true).ToList();
             foreach (var c in Cars)
             {
-                if (c.IsActive == true)
+                if (c.Inactive == true)
                 {
                     activeCars++;
                 }
@@ -34,7 +34,7 @@ namespace CanvassPlan.Server.Services.GenerateServices
             while (teamsMade < activeCars)
             {
                 var d = Drivers[random.Next(Drivers.Count)];
-                if (d.IsDriver == true && d.IsActive == false && d.IsAbsent == false)
+                if (d.IsDriver == true && d.Inactive == false && d.IsAbsent == false)
                 {
                     model.Name = d.Name;
                     teamsMade++;
@@ -44,7 +44,7 @@ namespace CanvassPlan.Server.Services.GenerateServices
                 }
                 Drivers.Remove(d);
             }
-            if (AllSuccessful == true) { navigation.NavigateTo($"/team/"); }
+            if (AllSuccessful == true) { return true }
             else { message = "Could not generate a plan. Please try again later."; }
         }
     }

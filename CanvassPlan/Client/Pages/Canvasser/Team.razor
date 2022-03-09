@@ -26,7 +26,7 @@
 
                     @foreach (var team in Teams)
                     {
-                        if (team.IsActive == false) { <option value="@team.TeamId">@team.TeamId - @team.Name</option> }
+                        if (team.Inactive == false) { <option value="@team.TeamId">@team.TeamId - @team.Name</option> }
                     }
                 </InputSelect>
                 <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>

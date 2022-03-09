@@ -18,7 +18,7 @@ namespace CanvassPlan.Server.Models
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
         public ICollection<Canvasser> Riders { get; set; }
         public ICollection<Team> Teams { get; set; }    
         public DateTimeOffset DateCreated { get; set; }

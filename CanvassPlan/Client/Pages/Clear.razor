@@ -35,17 +35,15 @@
         bool AllSuccessful = false;
         foreach (var t in Teams)
         {
-            if (t.IsActive == false)
+            if (t.Inactive == false)
             {
-                t.IsActive = !t.IsActive;
+                t.Inactive = !t.Inactive;
                 var toggleRes = await http.PutAsJsonAsync<object>($"api/team/active/{t.TeamId}", new());
                 if(toggleRes.IsSuccessStatusCode) { AllSuccessful = true; }
                 else { AllSuccessful = false; }
             }
         }
-        if (AllSuccessful == true)
-        {
-            navigation.NavigateTo($"/team/");
-        } else { ErrorMessage = "Could not deactivate all teams. Please try again."; }
+        if (AllSuccessful == true) { navigation.NavigateTo($"/team/"); } 
+        else { ErrorMessage = "Could not deactivate all teams. Please try again."; }
     }
 }

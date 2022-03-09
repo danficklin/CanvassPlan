@@ -28,7 +28,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 DropDistance = model.DropDistance,
                 DropAddress = model.DropAddress,
                 DateCreated = DateTimeOffset.Now,
-                IsActive = false,
+                Inactive = false,
                 OwnerId = _userId
             };
             _ctx.Sites.Add(entity);
@@ -58,7 +58,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -85,7 +85,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 Drop = entity.Drop,
                 DropDistance = entity.DropDistance,
                 DropAddress = entity.DropAddress,
-                IsActive = entity.IsActive,
+                Inactive = entity.Inactive,
                 Canvassers = entity.Canvassers.Select(c => new CanvasserListItem
                 {
                     CanvasserId = c.CanvasserId,
@@ -105,7 +105,7 @@ namespace CanvassPlan.Server.Services.SiteServices
                 {
                     SiteId = s.SiteId,
                     Name = s.Name,
-                    IsActive = s.IsActive,
+                    Inactive = s.Inactive,
                 });
             return await query.ToListAsync();
         }
@@ -121,7 +121,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             entity.DropDistance = model.DropDistance;   
             entity.DropAddress = model.DropAddress;
             entity.DateModified = DateTimeOffset.Now;
-            entity.IsActive = model.IsActive;
+            entity.Inactive = model.Inactive;
             
             return await _ctx.SaveChangesAsync() == 1;
         }
@@ -130,7 +130,7 @@ namespace CanvassPlan.Server.Services.SiteServices
             if (id == default) return false;
             var entity = await _ctx.Sites.FindAsync(id);
             if (entity?.OwnerId != _userId) return false;
-            entity.IsActive = !entity.IsActive;
+            entity.Inactive = !entity.Inactive;
 
             return await _ctx.SaveChangesAsync() == 1;
         }

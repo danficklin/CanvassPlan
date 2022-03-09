@@ -18,22 +18,22 @@
                 @if (Car.Make != null) { <h4 class="card-title text-dark">Make: @Car.Make </h4> }
                 @if (Car.Model != null) { <h4 class="card-title text-dark">Model: @Car.Model </h4> }
                 @if (Car.Year != 0) { <h4 class="card-title text-dark">Year: @Car.Year </h4> } 
-                @if (Car.IsActive == true) { <p class="card-text text-danger">This car is inactive. </p> }
+                @if (Car.Inactive == true) { <p class="card-text text-danger">This car is inactive. </p> }
                 else { <p class="card-text text-dark">This car is active.</p> }
                 @if(Car.Riders?.LastOrDefault() != default) {
-                <h4 class="card-title text-dark">Assigned Canvasser: @Car.Riders.LastOrDefault()?.Name</h4>
-                } else { <p class="card-text text-dark"> No canvassers currently assigned.</p> }
+                <h4 class="card-title text-dark">Assigned Driver: @Car.Riders.LastOrDefault()?.Name</h4>
+                } else { <p class="card-text text-dark"> No canvasser currently assigned.</p> }
+                @if(ridersCount > 0)
+                {
+                    <h4 class="text-dark">Past Drivers</h4> 
+                    @foreach(CanvasserListItem c in Car.Riders)
+                    {
+                        <p class="text-dark">@c.Name</p>
+                    }
+                } else { <p class="card-text text-dark">No canvassers have been assigned to this vehicle.</p> }
                 @if(Car.Teams?.LastOrDefault() != default) {
                 <h4 class="card-title text-dark">This car is assigned to Team # @Car.Teams.LastOrDefault()?.TeamId</h4>
                 } else { <p class="card-text text-dark"> This car is not currently assigned to a team.</p> }
-                @if(ridersCount > 0)
-                {
-                    <h4 class="text-dark">Past Canvassers</h4> 
-                    @foreach(CanvasserListItem c in Car.Riders)
-                    {
-                        <h4>@c.Name</h4>
-                    }
-                } else { <p class="card-text text-dark">No canvassers have been assigned to this vehicle.</p> }
                 @if (Car.Notes != null) { <h4 class="card-title text-dark">Notes: @Car.Notes </h4> }
             </div>
             <div class="card-footer text-muted d-flex justify-content-between">
@@ -45,8 +45,8 @@
             <div class="text-center justify-content-between w-25">
                 <a href=@($"/car/edit/{CarId}") class="btn btn-outline-secondary">Edit</a>
                 <span style="width: 15px"></span>
-                @if (Car.IsActive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Car)">Deactivate</a> }
-                else if (Car.IsActive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Car)">Activate</a> }
+                @if (Car.Inactive == false) { <a class="btn btn-danger" @onclick="() => ToggleActive(Car)">Deactivate</a> }
+                else if (Car.Inactive == true) { <a class="btn btn-outline-danger" @onclick="() => ToggleActive(Car)">Activate</a> }
                 <span style="width: 15px"></span>
                 <hr />
                 <a href=@($"/car/team/{CarId}") class="btn btn-outline-success">Assign to Team</a>
@@ -66,7 +66,7 @@ else
 @code {
     [Parameter]
     public int CarId { get; set; }
-    private CarDetail Car = new CarDetail();
+    private CarDetail Car { get; set; } = new CarDetail();
     int ridersCount;
     private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
@@ -77,7 +77,7 @@ else
 
     private async void ToggleActive(CarDetail car)
     {
-        car.IsActive = !car.IsActive;
+        car.Inactive = !car.Inactive;
         var toggleRes = await http.PutAsJsonAsync<object>($"api/car/active/{car.CarId}", new());
         if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/{car.CarId}"); }
         else { ErrorMessage = "Could not modify this car. Please try again."; }

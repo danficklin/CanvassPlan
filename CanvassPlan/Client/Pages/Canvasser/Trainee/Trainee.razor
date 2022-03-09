@@ -40,7 +40,7 @@ else
             {
                 if (!hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == false && canvasser.IsTraining == true)
+                    @if (canvasser.Inactive == false && canvasser.IsTraining == true)
                     {
                         <tr>
                             <td>@canvasser.CanvasserId</td>
@@ -55,7 +55,7 @@ else
                 }
                 else if (hideAbsentChecked)
                 {
-                    @if (canvasser.IsActive == false && canvasser.IsTraining == true)
+                    @if (canvasser.Inactive == false && canvasser.IsTraining == true)
                     {
                         if (canvasser.IsAbsent == false)
                         {

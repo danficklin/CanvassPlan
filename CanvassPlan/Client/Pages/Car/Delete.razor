@@ -24,7 +24,7 @@
                 @if (Car.Make != null) { <h4 class="card-title text-dark">Make: @Car.Make </h4> }
                 @if (Car.Model != null) { <h4 class="card-title text-dark">Model: @Car.Model </h4> }
                 @if (Car.Year != 0) { <h4 class="card-title text-dark">Year: @Car.Year </h4> } 
-                @if (Car.IsActive == true) { <p class="card-text text-danger">This car is inactive. </p> }
+                @if (Car.Inactive == true) { <p class="card-text text-danger">This car is inactive. </p> }
                 else { <p class="card-text text-dark">This car is active.</p> }
                 @if(Car.Riders?.LastOrDefault() != default) {
                 <h4 class="card-title text-dark">Assigned Canvasser: @Car.Riders.LastOrDefault()?.Name</h4>

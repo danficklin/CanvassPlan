@@ -103,10 +103,10 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<bool>("DroveYesterday")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAbsent")
+                    b.Property<bool>("Inactive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsAbsent")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDriver")
@@ -150,7 +150,7 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<DateTimeOffset?>("DateModified")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("Inactive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Make")
@@ -207,7 +207,7 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<double>("DropDistance")
                         .HasColumnType("float");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("Inactive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -239,7 +239,7 @@ namespace CanvassPlan.Server.Data.Migrations
                     b.Property<DateTimeOffset?>("DateModified")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("Inactive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")

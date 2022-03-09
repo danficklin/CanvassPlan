@@ -10,6 +10,6 @@ namespace CanvassPlan.Shared.Models.Car
     {
         public int CarId { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; }
+        public bool Inactive { get; set; }
     }
 }

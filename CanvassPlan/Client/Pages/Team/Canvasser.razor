@@ -26,7 +26,7 @@
 
                     @foreach (var canvasser in Canvassers)
                     {
-                        if (canvasser.IsActive == false) { <option value="@canvasser.CanvasserId">@canvasser.Name</option> }
+                        if (canvasser.Inactive == false) { <option value="@canvasser.CanvasserId">@canvasser.Name</option> }
                     }
                 </InputSelect>
                 <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>

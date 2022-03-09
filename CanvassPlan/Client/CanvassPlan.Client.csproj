@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Content Remove="Pages\Team\Manipulate.razor" />
+    <Content Remove="Shared\Footer.razor" />
   </ItemGroup>
 
   <ItemGroup>

@@ -26,7 +26,7 @@
 
                     @foreach (var site in Sites)
                     {
-                        if (site.IsActive == false) { <option value="@site.SiteId">@site.Name</option> }
+                        if (site.Inactive == false) { <option value="@site.SiteId">@site.Name</option> }
                     }
                 </InputSelect>
                 <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
