@@ -25,7 +25,7 @@ else
         <tbody>
                 @foreach (var canvasser in _canvassers)
                 {
-                    @if (canvasser.Inactive == true)
+                    @if (canvasser.Inactive == false)
                     {
                     <tr>
                         <td>@canvasser.CanvasserId</td>

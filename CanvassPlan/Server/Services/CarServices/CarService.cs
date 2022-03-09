@@ -153,14 +153,14 @@ namespace CanvassPlan.Server.Services.CarServices
             return await _ctx.SaveChangesAsync() == 1;
         }
 
-        public async Task<bool> AddCarToTeamAsync(int carId, CarAddToTeam model)
+        public async Task<bool> AddCarToTeamAsync(int teamId, CarAddToTeam model)
         {
             var car = await _ctx.Cars.FindAsync(model.CarId);
             var team = await _ctx.Teams
                 .Include(c => c.Cars)
                 .Where(c => c.OwnerId == _userId)
                 .FirstOrDefaultAsync(t => t.TeamId == model.TeamId);
-            if (model.CarId == carId)
+            if (model.TeamId == teamId)
             {
                 team.Cars.Add(car);
                 var numberOfChanges = await _ctx.SaveChangesAsync();

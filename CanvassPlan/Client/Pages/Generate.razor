@@ -29,7 +29,15 @@
     <div class="container">
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <button @onclick="() => CreateTeamForEachPresentDriver()" class="btn btn-danger text-white">Generate Plan</button>
+                <button @onclick="() => CreateTeamForEachPresentDriver()" class="btn btn-success text-white">Generate Teams</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center justify-content-between w-50">
+                <button @onclick="() => AddCarToEachTeam()" class="btn btn-info text-white">Assign Cars to Teams</button>
             </div>
         </div>
     </div>
@@ -93,53 +101,55 @@
         else { errorMessage = "Could not generate a plan. Please try again later."; }
     }
 
-    //private async void AddCarToEachTeam()
-    //{
-    //    bool AddCarSuccessful = false;
-    //    int carsAssigned = 0;
-    //    List<CarListItem> ActiveCars = Cars.Where(a => a.Inactive == true).ToList();
-    //    List<TeamListItem> ActiveTeams = Teams.Where(t => t.Inactive == true).ToList();
-    //    while (carsAssigned < ActiveCars.Count)
-    //    {
-    //        var c = Cars[random.Next(ActiveCars.Count)];
-    //        var t = Teams[random.Next(ActiveTeams.Count)];
-    //        if (t.Inactive == true)
-    //        {
-    //            carsAssigned++;
-    //            var addRes = await http.PostAsJsonAsync<CarAddToTeam>("/api/car/team", t.TeamId, car);
-    //            if (addRes.IsSuccessStatusCode) { AddCarSuccessful = true; }
-    //            else { AddCarSuccessful = false; }
-    //        }
-    //        ActiveCars.Remove(c);
-    //        ActiveTeams.Remove(t);
-    //    }
-    //}
+    private async void AddCarToEachTeam()
+    {
+        bool AddCarSuccessful = false;
+        int carsAssigned = 0;
+        List<CarListItem> ActiveCars = Cars.Where(a => a.Inactive == false).ToList();
+        List<TeamListItem> ActiveTeams = Teams.Where(t => t.Inactive == false).ToList();
+        List<TeamListItem> CarlessTeams = ActiveTeams.Where(c => c.Cars.Count == 0).ToList();
+        while (carsAssigned < ActiveCars.Count && carsAssigned < ActiveTeams.Count)
+        {
+            var c = ActiveCars[random.Next(ActiveCars.Count)];
+            var t = CarlessTeams[random.Next(CarlessTeams.Count)];
+            if (t.Inactive == false)
+            {
+                car.CarId = c.CarId;
+                car.TeamId = t.TeamId;
+                var addRes = await http.PutAsJsonAsync<CarAddToTeam>($"api/car/team/{t.TeamId}", car);
+                if (addRes.IsSuccessStatusCode) { AddCarSuccessful = true; errorMessage = "Cars added to teams successfully."; }
+                else { AddCarSuccessful = false; }
+            }
+            ActiveCars.Remove(c);
+            CarlessTeams.Remove(t);
+        }
+    }
 
     //private async void GeneratePlan()
     //{
     //    bool AllSuccessful = false;
 
     //    CreateTeamForEachPresentDriver();
-        //AddCarToEachTeam();
-        //{
+    //    AddCarToEachTeam();
+    //    {
 
-        //}
+    //    }
 
-        //async void AddTraineesToTeams ()
-        //{
+    //    async void AddTraineesToTeams ()
+    //    {
 
-        //}
+    //    }
 
-        //asnyc void AddLeadersToTeams ()
-        //{
+    //    asnyc void AddLeadersToTeams ()
+    //    {
 
-        //}
-        //if(CreateTeamSuccessful && AddCarSuccessful == true) { AllSuccessful = true; }
+    //    }
+    //    if(CreateTeamSuccessful && AddCarSuccessful == true) { AllSuccessful = true; }
     //    AllSuccessful = true;
     //    if (AllSuccessful == true) 
     //    { 
     //    navigation.NavigateTo($"/team/"); 
     //    }
-    //    else { message = "Could not generate a plan. Please try again later."; }
+    //    else { errorMessage = "Could not generate a plan. Please try again later."; }
     //}
 }

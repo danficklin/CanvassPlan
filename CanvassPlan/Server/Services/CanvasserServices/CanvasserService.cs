@@ -229,6 +229,8 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 //if (car?.OwnerId != _userId) return false;
                 if (model.CanvasserId == canvasserId)
                 {
+                    car.Riders.Remove(canvasser);
+                    await _ctx.SaveChangesAsync();
                     car.Riders.Add(canvasser);
                     var numberOfChanges = await _ctx.SaveChangesAsync();
                     return numberOfChanges == 1;
@@ -246,6 +248,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             //if (team?.OwnerId != _userId) return false;
             if (model.CanvasserId == canvasserId)
             {
+                team.Canvassers.Remove(canvasser);
                 team.Canvassers.Add(canvasser);
                 var numberOfChanges = await _ctx.SaveChangesAsync();
                 return numberOfChanges == 1;
@@ -262,6 +265,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             //if (site?.OwnerId != _userId) return false;
             if (model.CanvasserId == canvasserId)
             {
+                site.Canvassers.Remove(canvasser);
                 site.Canvassers.Add(canvasser);
                 var numberOfChanges = await _ctx.SaveChangesAsync();
                 return numberOfChanges == 1;
