@@ -25,7 +25,7 @@ else
         <tbody>
                 @foreach (var canvasser in _canvassers)
                 {
-                    @if (canvasser.Inactive == false)
+                    @if (canvasser.Inactive == true)
                     {
                     <tr>
                         <td>@canvasser.CanvasserId</td>
@@ -45,6 +45,7 @@ else
         </tbody>
     </table>
 }
+<a href=@($"/") class="btn btn-primary btn-block btn-lg">Home</a>
 
 @code {
     private List<CanvasserListItem> _canvassers;

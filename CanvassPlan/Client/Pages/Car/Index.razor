@@ -37,8 +37,6 @@ else
                             <span style="width: 5px"></span>
                             <button class="btn btn-danger" @onclick="() => ToggleActive(car)">Deactivate</button>
                             <span style="width: 5px"></span>
-                            <a href=@($"/car/canvasser/{car.CarId}") class="btn btn-outline-primary">Assign to Canvasser</a>
-                            <span style="width: 5px"></span>
                             <a href=@($"/car/team/{car.CarId}") class="btn btn-outline-success">Assign to Team</a>
                         </td>
                     </tr>
@@ -47,6 +45,7 @@ else
         </tbody>
     </table>
 }
+<a href=@($"/") class="btn btn-primary btn-block btn-lg">Home</a>
 
 @code {
     private List<CarListItem> _cars;

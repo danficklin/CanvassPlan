@@ -38,9 +38,6 @@ else
                             <a href=@($"team/edit/{team.TeamId}") class="btn btn-outline-secondary">Edit</a>
                             <span style="width: 5px"></span>
                             <button class="btn btn-danger" @onclick="() => ToggleActive(team)">Deactivate</button>
-                            <span style="width: 5px"></span>
-                            <a href=@($"/team/canvasser/{team.TeamId}") class="btn btn-outline-primary">Assign to Canvasser</a>
-                            <span style="width: 5px"></span>
                         </td>
                     </tr>
                 }
@@ -49,8 +46,10 @@ else
     </table>
     <a href=@($"/clear") class="btn btn-danger btn-block btn-lg">Reset Teams</a>
     <hr />
-    <a href=@($"/generate") class="btn btn-success btn-block btn-lg">Generate Teams</a>
+    <a href=@($"/generate") class="btn btn-success btn-block btn-lg">Generate Plan</a>
+    <hr />
 }
+<a href=@($"/") class="btn btn-primary btn-block btn-lg">Home</a>
 
 @code {
     private List<TeamListItem> _teams;

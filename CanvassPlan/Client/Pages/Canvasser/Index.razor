@@ -48,9 +48,9 @@ else
                     {
                         <tr>
                             <td>@canvasser.CanvasserId</td>
-                            <td>@canvasser.Name</td>
+                            
                             <td>
-                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-primary btn-lg">@canvasser.Name</a>
                                 <span style="width: 5px"></span>
                                 <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                                 <span style="width: 5px"></span>
@@ -111,6 +111,7 @@ else
         </tbody>
     </table>
 }
+<a href=@($"/") class="btn btn-primary btn-block btn-lg">Home</a>
 
 @code {
     private List<CanvasserListItem> Canvassers;
