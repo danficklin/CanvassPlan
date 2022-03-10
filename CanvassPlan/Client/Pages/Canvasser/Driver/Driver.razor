@@ -1,11 +1,13 @@
 ﻿@page "/canvasser/driver"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 <h3 class="text-primary" >Active Drivers</h3>
+<a class="text-success" href="/canvasser/create">Add a Canvasser   |</a>
 <a class="text-danger" href="/canvasser/driver/inactive">View Inactive Drivers   |</a>
 <a class="text-primary" href="/canvasser/driver/all">View All Drivers   |</a>
-<a class="text-success" href="/canvasser/">View Active Canvassers</a>
+<a class="text-info" href="/canvasser/">View Active Canvassers</a>
 
 <hr />
 
@@ -17,6 +19,7 @@
         </div>
     </div>
 </div>
+
 
 <hr />
 
@@ -44,11 +47,17 @@ else
                     {
                         <tr>
                             <td>@canvasser.CanvasserId</td>
-                            <td>@canvasser.Name</td>
                             <td>
-                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-light btn-lg">@canvasser.Name</a>
+                                <span style="width: 5px"></span>
                                 <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
-                                <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                                <span style="width: 15px"></span>
+                                 @if (canvasser.IsAbsent == false) { <a class="btn btn-success" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a> }
+                                 else if (canvasser.IsAbsent == true) { <a class="btn btn-outline-success" @onclick="() => ToggleAbsent(canvasser)">Mark as Present</a>}
+                                 <span style="width: 5px"></span>
+                                <a class="btn btn-outline-danger" @onclick="() => ToggleActive(canvasser)">Deactivate</a>
+                                <span style="width: 15px"></span>
+                                <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Revoke Driving Privileges</a>
                             </td>
                         </tr>
                     }
@@ -61,11 +70,14 @@ else
                         {
                             <tr>
                                 <td>@canvasser.CanvasserId</td>
-                                <td>@canvasser.Name</td>
                                 <td>
-                                    <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                                    <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-light btn-lg">@canvasser.Name</a>
+                                    <span style="width: 5px"></span>
                                     <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
-                                    <a href=@($"canvasser/delete/{canvasser.CanvasserId}") class="btn btn-outline-danger">Delete</a>
+                                    <a class="btn btn-success" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a>
+                                    <a class="btn btn-outline-danger" @onclick="() => ToggleActive(canvasser)">Deactivate</a>
+                                    <span style="width: 15px"></span>
+                                    <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Revoke Driving Privileges</a>
                                 </td>
                             </tr>
                             }
@@ -79,6 +91,7 @@ else
 @code {
     private List<CanvasserListItem> _canvassers;
     private bool hideAbsentChecked { get; set; } = false;
+    private string ErrorMessage { get;  set; }
     protected override async Task OnInitializedAsync()
     {
         _canvassers = await http.GetFromJsonAsync<List<CanvasserListItem>>("api/canvasser"); 
@@ -88,4 +101,29 @@ else
     {
         hideAbsentChecked = !hideAbsentChecked;
     }
+
+    private async void ToggleActive(CanvasserListItem canvasser)
+    {
+        canvasser.Inactive = !canvasser.Inactive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/active/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/driver"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+    private async void ToggleDriver(CanvasserListItem canvasser)
+    {
+        canvasser.IsDriver = !canvasser.IsDriver;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/driver/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/driver"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+
+    private async void ToggleAbsent(CanvasserListItem canvasser)
+    {
+        canvasser.IsAbsent = !canvasser.IsAbsent;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/absent/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/driver"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+
+
 }

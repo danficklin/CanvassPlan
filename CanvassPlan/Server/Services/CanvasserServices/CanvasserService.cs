@@ -32,7 +32,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 IsLeader = model.IsLeader,
                 IsTraining = model.IsTraining,
                 IsAbsent = false,
-                //Inactive = false,
+                Inactive = false,
                 OwnerId = _userId,
                 DateCreated = DateTimeOffset.Now,
             };
@@ -68,7 +68,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 IsLeader = entity.IsLeader,
                 IsTraining = entity.IsTraining,
                 IsAbsent = entity.IsAbsent,
-                //Inactive = entity.Inactive,
+                Inactive = entity.Inactive,
                 DroveYesterday = entity.DroveYesterday,
                 Teams = entity.Teams.Select(t => new TeamListItem
                 {
@@ -120,7 +120,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 IsLeader = entity.IsLeader,
                 IsTraining = entity.IsTraining,
                 IsAbsent = entity.IsAbsent,
-                //Inactive = entity.Inactive,
+                Inactive = entity.Inactive,
                 DroveYesterday = entity.DroveYesterday,
                 Teams = entity.Teams.Select(t => new TeamListItem
                 {
@@ -161,7 +161,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
                 {
                     CanvasserId = n.CanvasserId,
                     Name = n.Name,
-                    //Inactive = n.Inactive,
+                    Inactive = n.Inactive,
                     IsAbsent = n.IsAbsent, 
                     IsDriver = n.IsDriver,
                     IsLeader = n.IsLeader,
@@ -183,7 +183,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             entity.IsLeader = model.IsLeader;
             entity.IsTraining = model.IsTraining;
             entity.IsAbsent = model.IsAbsent;
-            //entity.Inactive = model.Inactive;
+            entity.Inactive = model.Inactive;
             entity.DateModified = DateTimeOffset.Now;
 
             return await _ctx.SaveChangesAsync() == 1;
@@ -204,7 +204,7 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             if (id == default) return false;
             var entity = await _ctx.Canvassers.FindAsync(id);
             if (entity?.OwnerId != _userId) return false;
-            //entity.Inactive = !entity.Inactive;
+            entity.Inactive = !entity.Inactive;
 
             return await _ctx.SaveChangesAsync() == 1;
         }

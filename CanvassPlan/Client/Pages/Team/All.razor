@@ -1,6 +1,7 @@
 ﻿@page "/team/all"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 <h3 class="text-info">All Teams</h3>
 <a class="text-success" href="/team/create">Add a Team   |</a>
@@ -30,7 +31,8 @@ else
                     <td>
                         <a href=@($"team/{team.TeamId}") class="btn btn-outline-info">Details</a>
                         <a href=@($"team/edit/{team.TeamId}") class="btn btn-outline-secondary">Edit</a>
-                        <a href=@($"team/delete/{team.TeamId}") class="btn btn-outline-danger">Delete</a>
+                        <span style="width: 5px"></span>
+                        <button class="btn btn-danger" @onclick="() => ToggleActive(team)">Deactivate</button>
                     </td>
                 </tr>
                 
@@ -42,8 +44,17 @@ else
 
 @code {
     private List<TeamListItem> _teams;
+    private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
         _teams = await http.GetFromJsonAsync<List<TeamListItem>>("api/team"); 
+    }
+
+    private async void ToggleActive(TeamListItem team)
+    {
+        team.Inactive = !team.Inactive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/team/active/{team.TeamId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/team/"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
 }

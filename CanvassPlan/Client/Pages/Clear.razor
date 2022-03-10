@@ -7,15 +7,15 @@
 {
     <h2 class="text-danger">@Message</h2>
 }
-<h3>Reset Teams</h3>
+<h3>Archive Teams</h3>
 
-<p>Reset sets all current teams to inactive so that canvassers and cars can be assigned to new teams.</p>
+<p>This sets all current teams to inactive so that canvassers and cars can be assigned to newly created teams for the day.</p>
 
 
     <div class="container">
         <div class="d-flex justify-content-center mt-3">
             <div class="text-center justify-content-between w-50">
-                <a href="#" @onclick="() => DeactivateAllTeams()" class="btn btn-danger text-white">Confirm Clear</a>
+                <a href="#" @onclick="() => DeactivateAllTeams()" class="btn btn-danger text-white">Confirm Archive</a>
             </div>
         </div>
     </div>

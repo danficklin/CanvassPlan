@@ -1,6 +1,7 @@
 ﻿@page "/car/all"
 @attribute [Authorize]
 @inject HttpClient http
+@inject NavigationManager navigation
 
 <h3 class="text-info" >All Cars</h3>
 <a class="text-success" href="/car/create">Add a Car   |</a>
@@ -30,7 +31,8 @@ else
                     <td>
                         <a href=@($"car/{car.CarId}") class="btn btn-outline-info">Details</a>
                         <a href=@($"car/edit/{car.CarId}") class="btn btn-outline-secondary">Edit</a>
-                        <a href=@($"car/delete/{car.CarId}") class="btn btn-outline-danger">Delete</a>
+                        <span style="width: 5px"></span>
+                        <button class="btn btn-danger" @onclick="() => ToggleActive(car)">Deactivate</button>
                     </td>
                 </tr>
             }
@@ -41,8 +43,17 @@ else
 
 @code {
     private List<CarListItem> _cars;
+    private string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
         _cars = await http.GetFromJsonAsync<List<CarListItem>>("api/car"); 
+    }
+
+    private async void ToggleActive(CarListItem car)
+    {
+        car.Inactive = !car.Inactive;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/car/active/{car.CarId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/car/"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
 }

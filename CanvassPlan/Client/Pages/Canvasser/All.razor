@@ -28,9 +28,9 @@ else
             {
                 <tr>
                     <td>@canvasser.CanvasserId</td>
-                    <td>@canvasser.Name</td>
                     <td>
-                        <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                        <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-light btn-lg">@canvasser.Name</a>
+                        <span style="width: 5px"></span>
                         <span style="width: 5px"></span>
                         <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                         <span style="width: 15px"></span>

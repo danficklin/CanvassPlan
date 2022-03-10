@@ -5,7 +5,7 @@
 
 <h3 class="text-primary" >Active Canvassers</h3>
 <a class="text-success" href="/canvasser/create">Add a Canvasser   |</a>
-<a class="text-info" href="/canvasser/all">View All Canvassers</a>
+<a class="text-info" href="/canvasser/all">View All Canvassers   |</a>
 <a class="text-danger" href="/canvasser/inactive">View Inactive Canvassers   |</a>
 <a class="text-primary" href="/canvasser/driver">View Only Drivers   |</a>
 <a class="text-info" href="/canvasser/leader">View Only Leaders   |</a>
@@ -50,7 +50,7 @@ else
                             <td>@canvasser.CanvasserId</td>
                             
                             <td>
-                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-primary btn-lg">@canvasser.Name</a>
+                                <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-light btn-lg">@canvasser.Name</a>
                                 <span style="width: 5px"></span>
                                 <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                                 <span style="width: 5px"></span>
@@ -85,9 +85,8 @@ else
                         {
                             <tr>
                                 <td>@canvasser.CanvasserId</td>
-                                <td>@canvasser.Name</td>
                                 <td>
-                                    <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-info">Details</a>
+                                    <a href=@($"canvasser/{canvasser.CanvasserId}") class="btn btn-outline-light btn-lg">@canvasser.Name</a>
                                     <span style="width: 5px"></span>
                                     <a href=@($"canvasser/edit/{canvasser.CanvasserId}") class="btn btn-outline-secondary">Edit</a>
                                     <span style="width: 5px"></span>
@@ -98,7 +97,7 @@ else
                                     <a class="btn btn-outline-success" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a>
                                     <span style="width: 15px"></span>
                                     @if (canvasser.IsDriver == false) { <a class="btn btn-warning" @onclick="() => ToggleDriver(canvasser)">Promote to Driver</a> }
-                                    else if (canvasser.IsDriver == true) { <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Promote to Leader</a>}
+                                    else if (canvasser.IsDriver == true) { <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Revoke Driving Privileges</a>}
                                     <span style="width: 15px"></span>
                                     @if (canvasser.IsLeader == false) { <a class="btn btn-primary" @onclick="() => ToggleLeader(canvasser)">Promote to Leader</a> }
                                     else if (canvasser.IsLeader == true) { <a class="btn btn-outline-primary" @onclick="() => ToggleLeader(canvasser)">Demote from Leader</a>}
