@@ -117,7 +117,7 @@
                 car.CarId = c.CarId;
                 car.TeamId = t.TeamId;
                 var addRes = await http.PutAsJsonAsync<CarAddToTeam>($"api/car/team/{t.TeamId}", car);
-                if (addRes.IsSuccessStatusCode) { AddCarSuccessful = true; errorMessage = "Cars added to teams successfully."; }
+                if (addRes.IsSuccessStatusCode) { AddCarSuccessful = true; }
                 else { AddCarSuccessful = false; }
             }
             ActiveCars.Remove(c);
