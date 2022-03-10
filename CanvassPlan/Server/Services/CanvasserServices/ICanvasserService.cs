@@ -14,6 +14,8 @@ namespace CanvassPlan.Server.Services.CanvasserServices
         Task<bool> ToggleCanvasserAbsentAsync(int id);
         Task<bool> ToggleCanvasserActiveAsync(int id);
         Task<bool> ToggleDriverAsync(int id);
+        Task<bool> ToggleLeaderAsync(int id);
+        Task<bool> ToggleTraineeAsync(int id);
         Task<bool> DeleteCanvasserAsync(int canvasserId);
         Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCar model);
         Task<bool> AddCanvasserToTeamAsync(int canvasserId, CanvasserAddToTeam model);

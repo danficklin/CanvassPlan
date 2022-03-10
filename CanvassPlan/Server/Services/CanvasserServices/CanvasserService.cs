@@ -219,6 +219,26 @@ namespace CanvassPlan.Server.Services.CanvasserServices
             return await _ctx.SaveChangesAsync() == 1;
         }
 
+        public async Task<bool> ToggleLeaderAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Canvassers.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsLeader = !entity.IsLeader;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> ToggleTraineeAsync(int id)
+        {
+            if (id == default) return false;
+            var entity = await _ctx.Canvassers.FindAsync(id);
+            if (entity?.OwnerId != _userId) return false;
+            entity.IsTraining = !entity.IsTraining;
+
+            return await _ctx.SaveChangesAsync() == 1;
+        }
+
         public async Task<bool> AddCanvasserToCarAsync(int canvasserId, CanvasserAddToCar model)
         {
             {

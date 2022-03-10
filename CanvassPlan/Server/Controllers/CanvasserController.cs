@@ -102,6 +102,26 @@ namespace CanvassPlan.Server.Controllers
             return BadRequest();
         }
 
+        [HttpPut("leader/{id}")]
+        public async Task<IActionResult> ToggleLeader(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _canvasserService.ToggleLeaderAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
+        [HttpPut("trainee/{id}")]
+        public async Task<IActionResult> ToggleTrainee(int id)
+        {
+            if (!SetUserIdInService()) return Unauthorized();
+            if (id == default || !ModelState.IsValid) return BadRequest();
+            bool wasSuccessful = await _canvasserService.ToggleTraineeAsync(id);
+            if (wasSuccessful) return Ok();
+            return BadRequest();
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

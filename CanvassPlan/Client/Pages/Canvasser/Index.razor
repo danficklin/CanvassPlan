@@ -67,6 +67,12 @@ else
                                  <span style="width: 15px"></span>
                                  @if (canvasser.IsDriver == false) { <a class="btn btn-warning" @onclick="() => ToggleDriver(canvasser)">Promote to Driver</a> }
                                  else if (canvasser.IsDriver == true) { <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Revoke Driving Privileges</a>}
+                                 <span style="width: 15px"></span>
+                                @if (canvasser.IsLeader == false) { <a class="btn btn-primary" @onclick="() => ToggleLeader(canvasser)">Promote to Leader</a> }
+                                else if (canvasser.IsLeader == true) { <a class="btn btn-outline-primary" @onclick="() => ToggleLeader(canvasser)">Demote from Leader</a>}
+                                <span style="width: 15px"></span>
+                                @if (canvasser.IsTraining == true) { <a class="btn btn-secondary" @onclick="() => ToggleTrainee(canvasser)">Promote from Trainee</a> }
+                                else if (canvasser.IsTraining == false) { <a class="btn btn-outline-secondary" @onclick="() => ToggleTrainee(canvasser)">Make Trainee</a>}
                             </td>
                         </tr>
                     }
@@ -92,7 +98,10 @@ else
                                     <a class="btn btn-outline-success" @onclick="() => ToggleAbsent(canvasser)">Mark as Absent</a>
                                     <span style="width: 15px"></span>
                                     @if (canvasser.IsDriver == false) { <a class="btn btn-warning" @onclick="() => ToggleDriver(canvasser)">Promote to Driver</a> }
-                                    else if (canvasser.IsDriver == true) { <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Revoke Driving Privileges</a>}
+                                    else if (canvasser.IsDriver == true) { <a class="btn btn-outline-warning" @onclick="() => ToggleDriver(canvasser)">Promote to Leader</a>}
+                                    <span style="width: 15px"></span>
+                                    @if (canvasser.IsLeader == false) { <a class="btn btn-primary" @onclick="() => ToggleLeader(canvasser)">Promote to Leader</a> }
+                                    else if (canvasser.IsLeader == true) { <a class="btn btn-outline-primary" @onclick="() => ToggleLeader(canvasser)">Demote from Leader</a>}
                                 </td>
                             </tr>
                             }
@@ -134,6 +143,22 @@ else
     {
         canvasser.IsDriver = !canvasser.IsDriver;
         var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/driver/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+
+    private async void ToggleLeader(CanvasserListItem canvasser)
+    {
+        canvasser.IsLeader = !canvasser.IsLeader;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/leader/{canvasser.CanvasserId}", new());
+        if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/"); }
+        else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
+    }
+
+    private async void ToggleTrainee(CanvasserListItem canvasser)
+    {
+        canvasser.IsTraining = !canvasser.IsTraining;
+        var toggleRes = await http.PutAsJsonAsync<object>($"api/canvasser/trainee/{canvasser.CanvasserId}", new());
         if(toggleRes.IsSuccessStatusCode) { navigation.NavigateTo($"/canvasser/"); }
         else { ErrorMessage = "Could not modify this canvasser. Please try again."; }
     }
